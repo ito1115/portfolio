@@ -108,7 +108,7 @@
 - 積読本登録（タイトル、購入理由、購入日）
 - 積読本詳細・一覧
 - ランダム推薦機能
-- 読書進捗管理（今度買いたい→積読→完読への状態変更）※MVP段階
+- 読書進捗管理（今度買いたい→積読→完読への状態変更）
 - 基本的な検索機能（タイトル・著者名）
 
 ### 本リリース
@@ -117,8 +117,7 @@
 - 積読本の購入媒体管理機能
     - 紙の本 / Kindle / 楽天Kobo / Apple Books など購入先を記録
 - 熟成度（購入時期からの経過期間をenumを使用したランク分け方式）表示
-- 読書進捗管理※本リリース段階
-- スマホでの写真撮影による本の登録（バーコード読み取りなど）
+- 本のバーコード読み取り登録
 - 積読本登録時のTwitter/Xシェア機能
 
 ## ■ 機能の実装方針予定
@@ -146,21 +145,10 @@
 **読書進捗管理**
 
 ```
-# MVP段階（7時間）
 - booksテーブル: 基本的な状態管理（enum）
 - 簡単なメモ機能（simple_memoカラム）
 - 状態変更時の日付自動記録
 - Bootstrap tabs: 状態別表示
-
-# 本リリース段階（+20時間）
-- reading_recordsテーブル: 詳細な読書記録
-- book_reviewsテーブル: 感想・レビュー機能
-- WYSIWYG エディタでの感想入力
-
-# データの一貫性
-- books.statusが基本的な状態管理
-- reading_recordsが詳細記録（status=completedの時のみ）
-- book_reviewsが感想記録（reading_record存在時のみ）
 
 # 特徴的な機能
 - ワンクリック状態変更: wish→tsundoku→completedの直感的操作
@@ -253,7 +241,7 @@ Phase 3: 学習進捗の可視化とフィードバック機能（+3時間）
 | **フロントエンド** | HTML + CSS + Bootstrap 5 + JavaScript・リアルタイム検索、タブUI、バーコード読み取り（QuaggaJS/Zxing-js） |
 | **デプロイ** | Heroku・PostgreSQLとの連携容易、MVP開発向き |
 | **画像保存** | なし・バーコード読み取りはブラウザ上でリアルタイム解析、サーバーに画像は保存しない |
-| **通知メール** | Action Mailer + SendGrid等・週次/隔週/月次通知 |
+| **通知メール** | Action Mailer + SendGrid等・週次通知 |
 
 ### 使用予定Gem一覧（主要なもの）
 
@@ -269,3 +257,7 @@ Phase 3: 学習進捗の可視化とフィードバック機能（+3時間）
 | `bootstrap` | フロントUI |
 | `sendgrid-ruby` | Action MailerでSendGrid経由のメール送信（本番用） |
 | `dotenv-rails` | 環境変数管理（APIキーや秘密情報管理用） |
+
+### 画面遷移図
+Figma:
+https://www.figma.com/design/KJrY60xUXE9pHcJPVZMLdV/%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3_%E5%8D%92%E6%A5%AD%E5%88%B6%E4%BD%9C?node-id=0-1&p=f&t=9rHyMWMnWG3ORFpE-0
