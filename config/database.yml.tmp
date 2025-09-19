@@ -1,0 +1,9 @@
+
+test:
+  <<: *default
+  database: graduation_app_test
+  username: postgres
+  password: password
+  host: db
+  port: 5432
+
