@@ -1,0 +1,58 @@
+<%= form_with(model: reading, local: true) do |form| %>
+  <% if reading.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(reading.errors.count, "error") %> prohibited this reading from being saved:</h4>
+      <ul>
+        <% reading.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :book_id, "本", class: "form-label" %>
+    <%= form.collection_select :book_id, Book.all, :id, :title,
+                               { prompt: "本を選択してください" },
+                               { class: "form-select" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :status, "読書状態", class: "form-label" %>
+    <%= form.select :status,
+                    options_for_select([
+                      ['読みたい', 'wish'],
+                      ['積読', 'tsundoku'],
+                      ['読書中', 'reading'],
+                      ['読了', 'completed']
+                    ], reading.status),
+                    { prompt: "状態を選択してください" },
+                    { class: "form-select" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :reason, "読む理由・動機", class: "form-label" %>
+    <%= form.text_area :reason, class: "form-control", rows: 3,
+                       placeholder: "この本を読む理由や動機を記録してください" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :wish_date, "読みたいと思った日", class: "form-label" %>
+    <%= form.date_field :wish_date, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :tsundoku_date, "積読開始日", class: "form-label" %>
+    <%= form.date_field :tsundoku_date, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :completed_date, "読了日", class: "form-label" %>
+    <%= form.date_field :completed_date, class: "form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "キャンセル", readings_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>
