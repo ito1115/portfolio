@@ -1,0 +1,62 @@
+<h1>読書記録詳細</h1>
+
+<div class="card">
+  <div class="card-header">
+    <h3><%= @reading.book&.title || "本の情報なし" %></h3>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h5>読書状態</h5>
+        <span class="badge <%= @reading.status == 'completed' ? 'bg-success' : @reading.status == 'reading' ? 'bg-warning' : 'bg-secondary' %> mb-3">
+          <%= @reading.status&.humanize || "未設定" %>
+        </span>
+      </div>
+    </div>
+
+    <% if @reading.reason.present? %>
+      <div class="mb-3">
+        <h5>読む理由・動機</h5>
+        <p><%= simple_format(@reading.reason) %></p>
+      </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col-md-4">
+        <% if @reading.wish_date.present? %>
+          <h6>読みたいと思った日</h6>
+          <p><%= @reading.wish_date.strftime("%Y年%m月%d日") %></p>
+        <% end %>
+      </div>
+      <div class="col-md-4">
+        <% if @reading.tsundoku_date.present? %>
+          <h6>積読開始日</h6>
+          <p><%= @reading.tsundoku_date.strftime("%Y年%m月%d日") %></p>
+        <% end %>
+      </div>
+      <div class="col-md-4">
+        <% if @reading.completed_date.present? %>
+          <h6>読了日</h6>
+          <p><%= @reading.completed_date.strftime("%Y年%m月%d日") %></p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <small class="text-muted">
+        作成日: <%= @reading.created_at.strftime("%Y年%m月%d日 %H:%M") %>
+        <% if @reading.updated_at != @reading.created_at %>
+          | 更新日: <%= @reading.updated_at.strftime("%Y年%m月%d日 %H:%M") %>
+        <% end %>
+      </small>
+    </div>
+  </div>
+</div>
+
+<div class="mt-3">
+  <%= link_to "編集", edit_reading_path(@reading), class: "btn btn-primary" %>
+  <%= link_to "削除", @reading, method: :delete,
+              data: { confirm: "本当に削除しますか？" },
+              class: "btn btn-danger" %>
+  <%= link_to "一覧に戻る", readings_path, class: "btn btn-secondary" %>
+</div>

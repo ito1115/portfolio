@@ -1,4 +1,3 @@
 class Book < ApplicationRecord
-  belongs_to :user
-  has_many :reading, dependent: :destory
+  has_many :readings, dependent: :destroy
 end
