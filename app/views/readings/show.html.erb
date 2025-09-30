@@ -55,8 +55,8 @@
 
 <div class="mt-3">
   <%= link_to "編集", edit_reading_path(@reading), class: "btn btn-primary" %>
-  <%= link_to "削除", @reading, method: :delete,
-              data: { confirm: "本当に削除しますか？" },
-              class: "btn btn-danger" %>
+  <%= button_to "削除", @reading, method: :delete,
+                form: { data: { turbo_confirm: "本当に削除しますか？" } },
+                class: "btn btn-danger" %>
   <%= link_to "一覧に戻る", readings_path, class: "btn btn-secondary" %>
 </div>

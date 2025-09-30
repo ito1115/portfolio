@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :readings do;end
+  resources :readings
+
+  resources :books, only: [] do
+    collection do
+      get :search
+      post :create_from_google_books
+    end
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
