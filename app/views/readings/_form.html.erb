@@ -12,9 +12,37 @@
 
   <div class="mb-3">
     <%= form.label :book_id, "本", class: "form-label" %>
-    <%= form.collection_select :book_id, Book.all, :id, :title,
-                               { prompt: "本を選択してください" },
-                               { class: "form-select" } %>
+    <% if defined?(@selected_book) && @selected_book.present? %>
+      <div class="card mb-2">
+        <div class="card-body">
+          <div class="row">
+            <% if @selected_book.image_url.present? %>
+              <div class="col-md-2">
+                <%= image_tag @selected_book.image_url, alt: @selected_book.title, class: "img-fluid" %>
+              </div>
+            <% end %>
+            <div class="<%= @selected_book.image_url.present? ? 'col-md-10' : 'col-md-12' %>">
+              <h5><%= @selected_book.title %></h5>
+              <% if @selected_book.author.present? %>
+                <p class="mb-1"><strong>著者：</strong><%= @selected_book.author %></p>
+              <% end %>
+              <% if @selected_book.publisher.present? %>
+                <p class="mb-1"><small class="text-muted">出版社：<%= @selected_book.publisher %></small></p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%= form.hidden_field :book_id %>
+      <%= link_to "別の本を検索", search_books_path, class: "btn btn-sm btn-outline-secondary" %>
+    <% else %>
+      <%= form.collection_select :book_id, Book.all, :id, :title,
+                                 { prompt: "本を選択してください" },
+                                 { class: "form-select" } %>
+      <div class="mt-2">
+        <%= link_to "Google Booksで検索", search_books_path, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+    <% end %>
   </div>
 
   <div class="mb-3">

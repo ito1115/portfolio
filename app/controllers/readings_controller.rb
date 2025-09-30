@@ -11,6 +11,11 @@ class ReadingsController < ApplicationController
 
   def new
     @reading = current_user.readings.build
+    # 書籍検索から遷移してきた場合
+    if params[:book_id].present?
+      @reading.book_id = params[:book_id]
+      @selected_book = Book.find_by(id: params[:book_id])
+    end
   end
 
   def create
