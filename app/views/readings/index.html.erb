@@ -1,46 +1,51 @@
-<h1>読書記録一覧</h1>
+<div class="container">
+  <div class="header">
+    <h1>読書記録一覧</h1>
+    <div class="header-actions">
+      <%= link_to "新しい読書記録", new_reading_path, class: "btn btn-primary" %>
+    </div>
+  </div>
 
-<div class="mb-3">
-  <%= link_to "新しい読書記録", new_reading_path, class: "btn btn-primary" %>
-</div>
-
-<% if @readings.any? %>
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>本のタイトル</th>
-          <th>状態</th>
-          <th>作成日</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @readings.each do |reading| %>
-          <tr>
-            <td>
-              <%= reading.book&.title || "本の情報なし" %>
-            </td>
-            <td>
-              <span class="badge <%= reading.status == 'completed' ? 'bg-success' : reading.status == 'reading' ? 'bg-warning' : 'bg-secondary' %>">
-                <%= reading.status&.humanize || "未設定" %>
-              </span>
-            </td>
-            <td><%= reading.created_at.strftime("%Y/%m/%d") %></td>
-            <td>
-              <%= link_to "詳細", reading, class: "btn btn-sm btn-outline-primary" %>
-              <%= link_to "編集", edit_reading_path(reading), class: "btn btn-sm btn-outline-secondary" %>
-              <%= button_to "削除", reading, method: :delete,
-                            form: { data: { turbo_confirm: "本当に削除しますか？" }, style: "display: inline;" },
-                            class: "btn btn-sm btn-outline-danger" %>
-            </td>
-          </tr>
+  <% if @readings.any? %>
+    <% @readings.each do |reading| %>
+      <div class="book-card">
+        <% if reading.book&.image_url.present? %>
+          <%= image_tag reading.book.image_url, alt: reading.book.title, class: "book-image" %>
         <% end %>
-      </tbody>
-    </table>
-  </div>
-<% else %>
-  <div class="alert alert-info">
-    まだ読書記録がありません。<%= link_to "最初の記録を作成", new_reading_path %>してみましょう。
-  </div>
-<% end %>
+        <div class="book-content">
+          <h3><%= reading.book&.title || "本の情報なし" %></h3>
+          <% if reading.book&.author.present? %>
+            <p><strong>著者：</strong><%= reading.book.author %></p>
+          <% end %>
+          <p>
+            <%
+              status_class = case reading.status
+                when 'wish' then 'status-wish'
+                when 'tsundoku' then 'status-tsundoku'
+                when 'completed' then 'status-completed'
+                else 'status-wish'
+              end
+            %>
+            <span class="status-badge <%= status_class %>">
+              <%= reading.status&.humanize || "未設定" %>
+            </span>
+            <span class="status-date"><%= reading.created_at.strftime("%Y/%m/%d") %></span>
+          </p>
+          <div class="book-actions">
+            <%= link_to "詳細", reading, class: "btn btn-sm btn-outline-primary" %>
+            <%= link_to "編集", edit_reading_path(reading), class: "btn btn-sm btn-outline-secondary" %>
+            <%= button_to "削除", reading, method: :delete,
+                          form: { data: { turbo_confirm: "本当に削除しますか？" } },
+                          class: "btn btn-sm btn-danger" %>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="no-books">
+      <p>まだ読書記録がありません。</p>
+      <%= link_to "最初の記録を作成", new_reading_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
