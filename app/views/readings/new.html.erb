@@ -1,5 +1,12 @@
-<h1>新しい読書記録</h1>
+<div class="container edit-page">
+  <div class="header">
+    <h1>新しい読書記録</h1>
+    <div class="header-actions">
+      <%= link_to "一覧に戻る", readings_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
 
-<%= render 'form', reading: @reading %>
-
-<%= link_to "一覧に戻る", readings_path, class: "btn btn-secondary mt-3" %>
+  <div class="book-form">
+    <%= render 'form', reading: @reading %>
+  </div>
+</div>

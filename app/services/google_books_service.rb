@@ -18,6 +18,8 @@ class GoogleBooksService
       maxResults: max_results, # 取得件数
       langRestrict: 'ja'       # 日本語の本に限定
     }
+    # APIキーがあれば追加
+    params[:key] = ENV['GOOGLE_BOOKS_API_KEY'] if ENV['GOOGLE_BOOKS_API_KEY'].present?
     uri.query = URI.encode_www_form(params)
 
     begin
@@ -42,6 +44,10 @@ class GoogleBooksService
     return nil if volume_id.blank?
 
     uri = URI("#{BASE_URL}/#{volume_id}")
+    # APIキーがあればクエリパラメータに追加
+    if ENV['GOOGLE_BOOKS_API_KEY'].present?
+      uri.query = URI.encode_www_form(key: ENV['GOOGLE_BOOKS_API_KEY'])
+    end
 
     begin
       response = Net::HTTP.get_response(uri)

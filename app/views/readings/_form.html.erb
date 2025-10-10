@@ -1,7 +1,7 @@
 <%= form_with(model: reading, local: true) do |form| %>
   <% if reading.errors.any? %>
-    <div class="alert alert-danger">
-      <h4><%= pluralize(reading.errors.count, "error") %> prohibited this reading from being saved:</h4>
+    <div class="error-messages">
+      <h3><%= pluralize(reading.errors.count, "個のエラー") %>が発生しました：</h3>
       <ul>
         <% reading.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -10,43 +10,43 @@
     </div>
   <% end %>
 
-  <div class="mb-3">
-    <%= form.label :book_id, "本", class: "form-label" %>
+  <div class="form-group">
+    <%= form.label :book_id, "本", class: "form-label required" %>
     <% if defined?(@selected_book) && @selected_book.present? %>
-      <div class="card mb-2">
-        <div class="card-body">
-          <div class="row">
-            <% if @selected_book.image_url.present? %>
-              <div class="col-md-2">
-                <%= image_tag @selected_book.image_url, alt: @selected_book.title, class: "img-fluid" %>
-              </div>
+      <div class="current-image">
+        <label>選択中の本：</label>
+        <div style="display: flex; gap: 15px; align-items: start;">
+          <% if @selected_book.image_url.present? %>
+            <%= image_tag @selected_book.image_url, alt: @selected_book.title, class: "preview-image" %>
+          <% end %>
+          <div>
+            <h4><%= @selected_book.title %></h4>
+            <% if @selected_book.author.present? %>
+              <p><strong>著者：</strong><%= @selected_book.author %></p>
             <% end %>
-            <div class="<%= @selected_book.image_url.present? ? 'col-md-10' : 'col-md-12' %>">
-              <h5><%= @selected_book.title %></h5>
-              <% if @selected_book.author.present? %>
-                <p class="mb-1"><strong>著者：</strong><%= @selected_book.author %></p>
-              <% end %>
-              <% if @selected_book.publisher.present? %>
-                <p class="mb-1"><small class="text-muted">出版社：<%= @selected_book.publisher %></small></p>
-              <% end %>
-            </div>
+            <% if @selected_book.publisher.present? %>
+              <p style="color: #6c757d;">出版社：<%= @selected_book.publisher %></p>
+            <% end %>
           </div>
         </div>
       </div>
       <%= form.hidden_field :book_id %>
-      <%= link_to "別の本を検索", search_books_path, class: "btn btn-sm btn-outline-secondary" %>
+      <div class="google-books-actions">
+        <%= link_to "別の本を検索", search_books_path, class: "btn btn-sm btn-outline-secondary" %>
+      </div>
     <% else %>
       <%= form.collection_select :book_id, Book.all, :id, :title,
                                  { prompt: "本を選択してください" },
-                                 { class: "form-select" } %>
-      <div class="mt-2">
+                                 { class: "form-control" } %>
+      <small class="form-text">またはGoogle Booksで検索してください</small>
+      <div class="google-books-actions">
         <%= link_to "Google Booksで検索", search_books_path, class: "btn btn-sm btn-outline-primary" %>
       </div>
     <% end %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :status, "読書状態", class: "form-label" %>
+  <div class="form-group">
+    <%= form.label :status, "読書状態", class: "form-label required" %>
     <%= form.select :status,
                     options_for_select([
                       ['読みたい', 'wish'],
@@ -55,31 +55,33 @@
                       ['読了', 'completed']
                     ], reading.status),
                     { prompt: "状態を選択してください" },
-                    { class: "form-select" } %>
+                    { class: "form-control" } %>
   </div>
 
-  <div class="mb-3">
+  <div class="form-group">
     <%= form.label :reason, "読む理由・動機", class: "form-label" %>
-    <%= form.text_area :reason, class: "form-control", rows: 3,
+    <%= form.text_area :reason, class: "form-control", rows: 4,
                        placeholder: "この本を読む理由や動機を記録してください" %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :wish_date, "読みたいと思った日", class: "form-label" %>
-    <%= form.date_field :wish_date, class: "form-control" %>
+  <div class="form-row">
+    <div class="form-group half">
+      <%= form.label :wish_date, "読みたいと思った日", class: "form-label" %>
+      <%= form.date_field :wish_date, class: "form-control" %>
+    </div>
+
+    <div class="form-group half">
+      <%= form.label :tsundoku_date, "積読開始日", class: "form-label" %>
+      <%= form.date_field :tsundoku_date, class: "form-control" %>
+    </div>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :tsundoku_date, "積読開始日", class: "form-label" %>
-    <%= form.date_field :tsundoku_date, class: "form-control" %>
-  </div>
-
-  <div class="mb-3">
+  <div class="form-group">
     <%= form.label :completed_date, "読了日", class: "form-label" %>
     <%= form.date_field :completed_date, class: "form-control" %>
   </div>
 
-  <div class="actions">
+  <div class="form-actions">
     <%= form.submit class: "btn btn-primary" %>
     <%= link_to "キャンセル", readings_path, class: "btn btn-secondary" %>
   </div>

@@ -1,46 +1,211 @@
-<h1>読書記録一覧</h1>
+<div class="container">
+  <!-- ヘッダー -->
+  <div class="header">
+    <h1>TSUNDOKU</h1>
+    <div class="header-right">
+      <div class="user-info">
+        <p>Welcome, <%= current_user.email %>!</p>
+      </div>
+      <div class="header-nav">
+        <%= link_to "おすすめの一冊を見る", "#", class: "nav-link" %>
+        <%= link_to "本を検索", search_books_path, class: "nav-link" %>
+        <%= link_to "プロフィール", "#", class: "nav-link" %>
+      </div>
+    </div>
+  </div>
 
-<div class="mb-3">
-  <%= link_to "新しい読書記録", new_reading_path, class: "btn btn-primary" %>
+  <!-- 検索フォーム -->
+  <div class="search-section">
+    <div class="search-box">
+      <input type="text" id="myBooksSearchInput" placeholder="My Booksを検索（タイトル・著者）" class="search-input">
+      <button type="button" id="clearSearch" class="clear-button">×</button>
+    </div>
+  </div>
+
+  <!-- ステータスタブ -->
+  <%
+    all_count = @readings.count
+    wish_count = @readings.where(status: :wish).count
+    tsundoku_count = @readings.where(status: :tsundoku).count
+    completed_count = @readings.where(status: :completed).count
+  %>
+  <ul class="nav nav-tabs" id="readingStatusTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="all-tab" data-status="all" type="button" role="tab">
+        すべて (<%= all_count %>)
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="wish-tab" data-status="wish" type="button" role="tab">
+        読みたい (<%= wish_count %>)
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tsundoku-tab" data-status="tsundoku" type="button" role="tab">
+        積読 (<%= tsundoku_count %>)
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="completed-tab" data-status="completed" type="button" role="tab">
+        読了 (<%= completed_count %>)
+      </button>
+    </li>
+  </ul>
+
+  <!-- 読書記録リスト -->
+  <% if @readings.any? %>
+    <div class="readings-list">
+      <% @readings.each do |reading| %>
+        <div class="reading-item" data-status="<%= reading.status %>">
+          <div class="reading-cover">
+            <% if reading.book&.image_url.present? %>
+              <%= image_tag reading.book.image_url, alt: reading.book.title %>
+            <% else %>
+              <%= image_tag "https://via.placeholder.com/100x133/F5F5F7/86868B?text=No+Image", alt: "画像なし" %>
+            <% end %>
+          </div>
+          <div class="reading-content">
+            <h3 class="reading-title">
+              <%= link_to reading.book&.title || "本の情報なし", reading, class: "title-link" %>
+            </h3>
+            <p class="reading-author"><%= reading.book&.author || "著者不明" %></p>
+            <% if reading.reason.present? %>
+              <p class="reading-reason">
+                <span class="reason-label">購入理由：</span><%= reading.reason %>
+              </p>
+            <% end %>
+            <div class="reading-meta">
+              <%
+                status_class = case reading.status
+                  when 'wish' then 'status-wish'
+                  when 'tsundoku' then 'status-tsundoku'
+                  when 'reading' then 'status-reading'
+                  when 'completed' then 'status-completed'
+                  else 'status-wish'
+                end
+
+                status_text = case reading.status
+                  when 'wish' then '読みたい'
+                  when 'tsundoku' then '積読'
+                  when 'reading' then '読書中'
+                  when 'completed' then '読了'
+                  else '未設定'
+                end
+              %>
+              <span class="status-badge <%= status_class %>"><%= status_text %></span>
+            </div>
+            <div class="book-actions">
+              <%= link_to "編集", edit_reading_path(reading), class: "btn btn-sm btn-secondary" %>
+              <%= link_to "削除", reading_path(reading), class: "btn btn-sm btn-danger" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="no-books">
+      <p>まだ読書記録がありません。</p>
+      <%= link_to "最初の記録を作成", new_reading_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
 </div>
 
-<% if @readings.any? %>
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>本のタイトル</th>
-          <th>状態</th>
-          <th>作成日</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @readings.each do |reading| %>
-          <tr>
-            <td>
-              <%= reading.book&.title || "本の情報なし" %>
-            </td>
-            <td>
-              <span class="badge <%= reading.status == 'completed' ? 'bg-success' : reading.status == 'reading' ? 'bg-warning' : 'bg-secondary' %>">
-                <%= reading.status&.humanize || "未設定" %>
-              </span>
-            </td>
-            <td><%= reading.created_at.strftime("%Y/%m/%d") %></td>
-            <td>
-              <%= link_to "詳細", reading, class: "btn btn-sm btn-outline-primary" %>
-              <%= link_to "編集", edit_reading_path(reading), class: "btn btn-sm btn-outline-secondary" %>
-              <%= button_to "削除", reading, method: :delete,
-                            form: { data: { turbo_confirm: "本当に削除しますか？" }, style: "display: inline;" },
-                            class: "btn btn-sm btn-outline-danger" %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-<% else %>
-  <div class="alert alert-info">
-    まだ読書記録がありません。<%= link_to "最初の記録を作成", new_reading_path %>してみましょう。
-  </div>
-<% end %>
+<script>
+// My Books検索機能
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('myBooksSearchInput');
+  const clearButton = document.getElementById('clearSearch');
+  const readingItems = document.querySelectorAll('.reading-item');
+  const tabButtons = document.querySelectorAll('#readingStatusTabs [data-status]');
+
+  if (searchInput) {
+    // 検索実行関数
+    function performSearch() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+      let currentActiveStatus = 'all';
+
+      // 現在アクティブなタブを取得
+      const activeTab = document.querySelector('#readingStatusTabs .nav-link.active');
+      if (activeTab) {
+        currentActiveStatus = activeTab.getAttribute('data-status');
+      }
+
+      // クリアボタンの表示/非表示
+      clearButton.style.display = query.length > 0 ? 'flex' : 'none';
+
+      // 各書籍カードをチェック
+      readingItems.forEach(card => {
+        const title = card.querySelector('.reading-title a')?.textContent?.toLowerCase() || '';
+        const author = card.querySelector('.reading-author')?.textContent?.toLowerCase() || '';
+        const cardStatus = card.getAttribute('data-status');
+
+        // ステータスフィルターをチェック
+        const statusMatch = currentActiveStatus === 'all' || cardStatus === currentActiveStatus;
+
+        // 検索クエリーをチェック
+        const searchMatch = query.length === 0 ||
+                           title.includes(query) ||
+                           author.includes(query);
+
+        // 両方の条件を満たすかチェック
+        if (statusMatch && searchMatch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+    }
+
+    // リアルタイム検索
+    searchInput.addEventListener('input', performSearch);
+
+    // クリアボタン
+    clearButton.addEventListener('click', function() {
+      searchInput.value = '';
+      performSearch();
+    });
+
+    // タブ切り替え時も検索を再実行
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        setTimeout(performSearch, 100);
+      });
+    });
+  }
+});
+
+// タブフィルタリング機能
+document.addEventListener('DOMContentLoaded', function() {
+  const tabButtons = document.querySelectorAll('#readingStatusTabs [data-status]');
+  const readingItems = document.querySelectorAll('.reading-item[data-status]');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      // すべてのボタンからactiveクラスを削除
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+
+      // クリックされたボタンにactiveクラスを追加
+      this.classList.add('active');
+
+      // 選択されたステータスを取得
+      const selectedStatus = this.getAttribute('data-status');
+
+      // 書籍カードをフィルタリング
+      readingItems.forEach(card => {
+        const cardStatus = card.getAttribute('data-status');
+
+        if (selectedStatus === 'all' || cardStatus === selectedStatus) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
