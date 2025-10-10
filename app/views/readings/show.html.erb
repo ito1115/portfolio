@@ -41,12 +41,21 @@
               status_class = case @reading.status
                 when 'wish' then 'status-wish'
                 when 'tsundoku' then 'status-tsundoku'
+                when 'reading' then 'status-reading'
                 when 'completed' then 'status-completed'
                 else 'status-wish'
               end
+
+              status_text = case @reading.status
+                when 'wish' then '読みたい'
+                when 'tsundoku' then '積読'
+                when 'reading' then '読書中'
+                when 'completed' then '読了'
+                else '未設定'
+              end
             %>
             <span class="status-badge <%= status_class %>">
-              <%= @reading.status&.humanize || "未設定" %>
+              <%= status_text %>
             </span>
           </div>
         </div>
