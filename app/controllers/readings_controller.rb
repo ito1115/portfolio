@@ -58,6 +58,22 @@ class ReadingsController < ApplicationController
     @reading = current_user.readings.includes(:book).order("RANDOM()").first
   end
 
+  # AI購入理由推測API
+  def predict_reason
+    predicted_reason = ReasonPredictor.predict(
+      user: current_user,
+      book_title: params[:title],
+      book_author: params[:author],
+      book_description: params[:description]
+    )
+
+    if predicted_reason.present?
+      render json: { success: true, reason: predicted_reason }
+    else
+      render json: { success: false, error: 'AI推測に失敗しました' }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_reading
