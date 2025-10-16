@@ -54,6 +54,10 @@ class ReadingsController < ApplicationController
     redirect_to readings_url, notice: '削除しました'
   end
 
+  def recommend
+    @reading = current_user.readings.includes(:book).order("RANDOM()").first
+  end
+
   private
 
   def set_reading
