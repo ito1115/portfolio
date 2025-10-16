@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :readings do
     collection do
       get :recommend
+      post :predict_reason
     end
   end
 

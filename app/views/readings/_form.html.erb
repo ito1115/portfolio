@@ -60,8 +60,28 @@
 
   <div class="form-group">
     <%= form.label :reason, "読む理由・動機", class: "form-label" %>
+    <div class="ai-suggestion-container" id="aiSuggestionContainer" style="display: none;">
+      <div class="ai-suggestion-header">
+        <span class="ai-icon">🤔</span>
+        <span class="ai-label">もしかしたら...</span>
+      </div>
+      <div class="ai-suggestion-text" id="aiSuggestionText"></div>
+      <div class="ai-suggestion-buttons">
+        <button type="button" class="btn-use-suggestion" id="useSuggestionBtn">この理由を使う</button>
+        <button type="button" class="btn-retry-suggestion" id="retrySuggestionBtn">別の理由にする</button>
+      </div>
+    </div>
     <%= form.text_area :reason, class: "form-control", rows: 4,
-                       placeholder: "この本を読む理由や動機を記録してください" %>
+                       placeholder: "この本を読む理由や動機を記録してください", id: "reason_field" %>
+    <div class="ai-button-container">
+      <button type="button" class="btn-ai-suggest" id="aiSuggestBtn">
+        ✨ AIに提案してもらう
+      </button>
+      <div class="ai-loading" id="aiLoading" style="display: none;">
+        <span class="spinner"></span> AIが考え中...
+      </div>
+    </div>
+    <small class="form-text">例: 仕事のスキルアップのため、趣味で読みたい、友人に勧められた など</small>
   </div>
 
   <div class="form-row">
@@ -86,3 +106,262 @@
     <%= link_to "キャンセル", readings_path, class: "btn btn-secondary" %>
   </div>
 <% end %>
+
+<style>
+/* AI提案機能のスタイル */
+.ai-suggestion-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-suggestion-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ai-icon {
+  font-size: 24px;
+}
+
+.ai-label {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ai-suggestion-text {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px;
+  border-radius: 8px;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.ai-suggestion-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-use-suggestion {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+  flex: 1;
+}
+
+.btn-use-suggestion:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-retry-suggestion {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  border: 2px solid white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+  flex: 1;
+}
+
+.btn-retry-suggestion:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.ai-button-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn-ai-suggest {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn-ai-suggest:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+}
+
+.ai-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid rgba(102, 126, 234, 0.3);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const aiSuggestBtn = document.getElementById('aiSuggestBtn');
+  const aiLoading = document.getElementById('aiLoading');
+  const aiSuggestionContainer = document.getElementById('aiSuggestionContainer');
+  const aiSuggestionText = document.getElementById('aiSuggestionText');
+  const useSuggestionBtn = document.getElementById('useSuggestionBtn');
+  const retrySuggestionBtn = document.getElementById('retrySuggestionBtn');
+  const reasonField = document.getElementById('reason_field');
+
+  if (!aiSuggestBtn) {
+    return;
+  }
+
+  // 本の情報を取得する関数
+  function getBookInfo() {
+    // 選択中の本から情報を取得
+    const selectedBook = document.querySelector('.current-image');
+    if (selectedBook) {
+      const titleElement = selectedBook.querySelector('h4');
+      const authorElement = selectedBook.querySelector('p strong');
+
+      return {
+        title: titleElement ? titleElement.textContent.trim() : '',
+        author: authorElement ? authorElement.nextSibling.textContent.trim() : '',
+        description: ''
+      };
+    }
+
+    // selectフィールドから本を取得
+    const bookSelect = document.querySelector('select[name="reading[book_id]"]');
+    if (bookSelect && bookSelect.value) {
+      const selectedOption = bookSelect.options[bookSelect.selectedIndex];
+      return {
+        title: selectedOption.text,
+        author: '',
+        description: ''
+      };
+    }
+
+    return { title: '', author: '', description: '' };
+  }
+
+  // CSRFトークンを取得
+  function getCSRFToken() {
+    return document.querySelector('meta[name="csrf-token"]')?.content || '';
+  }
+
+  // AIに提案してもらうボタンのクリックイベント
+  aiSuggestBtn.addEventListener('click', async function(e) {
+    e.preventDefault();
+    await requestAISuggestion();
+  });
+
+  // AIに提案を再度リクエストする共通関数
+  async function requestAISuggestion() {
+    const bookInfo = getBookInfo();
+
+    // タイトルが取得できない場合
+    if (!bookInfo.title || bookInfo.title.trim() === '') {
+      alert('本を選択してください');
+      return;
+    }
+
+    // ローディング表示
+    aiSuggestBtn.style.display = 'none';
+    aiLoading.style.display = 'flex';
+    aiSuggestionContainer.style.display = 'none';
+
+    try {
+      const response = await fetch('/readings/predict_reason', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': getCSRFToken()
+        },
+        body: JSON.stringify({
+          title: bookInfo.title,
+          author: bookInfo.author,
+          description: bookInfo.description
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.reason) {
+        // AI提案を表示
+        aiSuggestionText.textContent = data.reason;
+        aiSuggestionContainer.style.display = 'block';
+      } else {
+        alert('AI推測に失敗しました: ' + (data.error || '不明なエラー'));
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('AI推測中にエラーが発生しました');
+    } finally {
+      // ローディング非表示、ボタン再表示
+      aiLoading.style.display = 'none';
+      aiSuggestBtn.style.display = 'block';
+    }
+  }
+
+  // 「この理由を使う」ボタンのクリックイベント
+  useSuggestionBtn.addEventListener('click', function() {
+    const suggestedReason = aiSuggestionText.textContent;
+    reasonField.value = suggestedReason;
+    aiSuggestionContainer.style.display = 'none';
+  });
+
+  // 「別の理由にする」ボタンのクリックイベント
+  retrySuggestionBtn.addEventListener('click', async function(e) {
+    e.preventDefault();
+    await requestAISuggestion();
+  });
+});
+</script>
