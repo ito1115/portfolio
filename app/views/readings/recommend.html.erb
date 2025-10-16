@@ -1,0 +1,127 @@
+<% if @reading.present? %>
+  <div class="container show-page">
+    <div class="header">
+      <h1>おすすめの一冊</h1>
+      <div class="header-actions">
+        <%= link_to "別のおすすめを見る", recommend_readings_path, class: "btn btn-primary", style: "margin-right: 10px;" %>
+        <%= link_to "一覧に戻る", readings_path, class: "btn btn-secondary" %>
+      </div>
+    </div>
+
+    <div class="book-detail">
+      <% if @reading.book&.image_url.present? %>
+        <%= image_tag @reading.book.image_url, alt: @reading.book.title, class: "book-cover" %>
+      <% else %>
+        <div class="no-image">画像なし</div>
+      <% end %>
+
+      <div class="book-info">
+        <div class="info-row">
+          <label>タイトル：</label>
+          <span><%= @reading.book&.title || "本の情報なし" %></span>
+        </div>
+
+        <% if @reading.book&.author.present? %>
+          <div class="info-row">
+            <label>著者：</label>
+            <span><%= @reading.book.author %></span>
+          </div>
+        <% end %>
+
+        <% if @reading.book&.publisher.present? %>
+          <div class="info-row">
+            <label>出版社：</label>
+            <span><%= @reading.book.publisher %></span>
+          </div>
+        <% end %>
+
+        <div class="reading-status-section">
+          <div class="current-status">
+            <label>読書状態：</label>
+            <div class="status-info">
+              <%
+                status_class = case @reading.status
+                  when 'wish' then 'status-wish'
+                  when 'tsundoku' then 'status-tsundoku'
+                  when 'reading' then 'status-reading'
+                  when 'completed' then 'status-completed'
+                  else 'status-wish'
+                end
+
+                status_text = case @reading.status
+                  when 'wish' then '読みたい'
+                  when 'tsundoku' then '積読'
+                  when 'reading' then '読書中'
+                  when 'completed' then '読了'
+                  else '未設定'
+                end
+              %>
+              <span class="status-badge <%= status_class %>">
+                <%= status_text %>
+              </span>
+            </div>
+          </div>
+
+          <% if @reading.wish_date.present? %>
+            <div class="info-row">
+              <label>読みたいと思った日：</label>
+              <span><%= @reading.wish_date.strftime("%Y年%m月%d日") %></span>
+            </div>
+          <% end %>
+
+          <% if @reading.tsundoku_date.present? %>
+            <div class="info-row">
+              <label>積読開始日：</label>
+              <span><%= @reading.tsundoku_date.strftime("%Y年%m月%d日") %></span>
+            </div>
+          <% end %>
+
+          <% if @reading.completed_date.present? %>
+            <div class="info-row">
+              <label>読了日：</label>
+              <span><%= @reading.completed_date.strftime("%Y年%m月%d日") %></span>
+            </div>
+          <% end %>
+
+          <% if @reading.reason.present? %>
+            <div class="info-row description">
+              <label>読む理由・動機：</label>
+              <p><%= simple_format(@reading.reason) %></p>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="info-row">
+          <small style="color: #6c757d;">
+            作成日: <%= @reading.created_at.strftime("%Y年%m月%d日 %H:%M") %>
+            <% if @reading.updated_at != @reading.created_at %>
+              | 更新日: <%= @reading.updated_at.strftime("%Y年%m月%d日 %H:%M") %>
+            <% end %>
+          </small>
+        </div>
+
+        <div class="book-actions" style="margin-top: 30px;">
+          <%= link_to "詳細を見る", @reading, class: "btn btn-primary" %>
+          <%= link_to "編集", edit_reading_path(@reading), class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="container show-page">
+    <div class="header">
+      <h1>おすすめの一冊</h1>
+      <div class="header-actions">
+        <%= link_to "一覧に戻る", readings_path, class: "btn btn-secondary" %>
+      </div>
+    </div>
+
+    <div class="book-detail" style="text-align: center; padding: 60px 20px;">
+      <p style="font-size: 18px; color: #6c757d; margin-bottom: 30px;">
+        まだ読書記録が登録されていません。<br>
+        積読本を登録しましょう！
+      </p>
+      <%= link_to "読書記録を新規作成", new_reading_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

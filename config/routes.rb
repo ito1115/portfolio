@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :readings
+  resources :readings do
+    collection do
+      get :recommend
+    end
+  end
 
   resources :books, only: [] do
     collection do

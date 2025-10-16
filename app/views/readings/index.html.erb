@@ -7,7 +7,7 @@
         <p>Welcome, <%= current_user.email %>!</p>
       </div>
       <div class="header-nav">
-        <%= link_to "おすすめの一冊を見る", "#", class: "nav-link" %>
+        <%= link_to "おすすめの一冊を見る", recommend_readings_path, class: "nav-link" %>
         <%= link_to "本を検索", search_books_path, class: "nav-link" %>
         <%= link_to "プロフィール", "#", class: "nav-link" %>
       </div>
