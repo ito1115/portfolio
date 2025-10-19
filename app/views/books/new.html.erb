@@ -1,0 +1,227 @@
+<div class="container">
+  <div class="header">
+    <h1>手動で本を追加</h1>
+    <%= link_to "検索に戻る", search_books_path, class: "btn btn-secondary" %>
+  </div>
+
+  <%= form_with model: @book, local: true, class: "book-form" do |form| %>
+    <% if @book.errors.any? %>
+      <div class="error-messages">
+        <h3><%= @book.errors.count %>件のエラーがあります:</h3>
+        <ul>
+          <% @book.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :title, "タイトル", class: "form-label required" %>
+      <%= form.text_field :title, class: "form-control", placeholder: "本のタイトルを入力", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :author, "著者", class: "form-label" %>
+      <%= form.text_field :author, class: "form-control", placeholder: "著者名を入力" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :publisher, "出版社", class: "form-label" %>
+      <%= form.text_field :publisher, class: "form-control", placeholder: "出版社名を入力" %>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group half">
+        <%= form.label :published_date, "出版日", class: "form-label" %>
+        <%= form.text_field :published_date, class: "form-control", placeholder: "例: 2024-01-01" %>
+        <small class="form-text">YYYY-MM-DD形式で入力</small>
+      </div>
+
+      <div class="form-group half">
+        <%= form.label :isbn, "ISBN", class: "form-label" %>
+        <%= form.text_field :isbn, class: "form-control", placeholder: "ISBNコードを入力" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :description, "概要", class: "form-label" %>
+      <%= form.text_area :description, class: "form-control", rows: 4, placeholder: "本の概要や説明を入力" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :image_url, "画像URL", class: "form-label" %>
+      <%= form.text_field :image_url, class: "form-control", placeholder: "本の表紙画像のURLを入力（任意）" %>
+      <small class="form-text">表紙画像のURLがあれば入力してください</small>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "本を追加", class: "btn btn-primary" %>
+      <%= link_to "キャンセル", search_books_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.header h1 {
+  margin: 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.book-form {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.error-messages {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  border: 1px solid #f5c6cb;
+}
+
+.error-messages h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.error-messages ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-group.half {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-label.required::after {
+  content: " *";
+  color: #dc3545;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+.form-text {
+  display: block;
+  margin-top: 5px;
+  color: #6c757d;
+  font-size: 12px;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.btn {
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .book-form {
+    padding: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-group.half {
+    margin-bottom: 20px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+}
+</style>

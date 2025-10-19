@@ -37,7 +37,7 @@
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="wish-tab" data-status="wish" type="button" role="tab">
-        読みたい (<%= wish_count %>)
+        気になる (<%= wish_count %>)
       </button>
     </li>
     <li class="nav-item" role="presentation">
@@ -47,7 +47,7 @@
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="completed-tab" data-status="completed" type="button" role="tab">
-        読了 (<%= completed_count %>)
+        積読卒業 (<%= completed_count %>)
       </button>
     </li>
   </ul>
@@ -79,16 +79,14 @@
                 status_class = case reading.status
                   when 'wish' then 'status-wish'
                   when 'tsundoku' then 'status-tsundoku'
-                  when 'reading' then 'status-reading'
                   when 'completed' then 'status-completed'
                   else 'status-wish'
                 end
 
                 status_text = case reading.status
-                  when 'wish' then '読みたい'
+                  when 'wish' then '気になる'
                   when 'tsundoku' then '積読'
-                  when 'reading' then '読書中'
-                  when 'completed' then '読了'
+                  when 'completed' then '積読卒業'
                   else '未設定'
                 end
               %>

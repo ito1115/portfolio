@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :books, only: [] do
+  resources :books, only: [:new, :create] do
     collection do
       get :search
       post :create_from_google_books
