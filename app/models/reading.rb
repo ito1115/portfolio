@@ -7,4 +7,6 @@ class Reading < ApplicationRecord
     tsundoku: 1,         # 積読
     completed: 2         # 積読卒業
   }
+
+  validates :status, presence: true
 end
