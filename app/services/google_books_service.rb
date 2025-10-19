@@ -4,18 +4,24 @@ require 'json'
 class GoogleBooksService
   BASE_URL = 'https://www.googleapis.com/books/v1/volumes'
 
-  # 本を検索するメソッド
+  # 本を検索するメソッド（ページネーション対応）
   # @param query [String] 検索キーワード（タイトル、著者名など）
-  # @param max_results [Integer] 取得する最大件数（デフォルト10件）
-  # @return [Array<Hash>] 本の情報の配列
-  def self.search(query, max_results: 10)
-    return [] if query.blank?
+  # @param page [Integer] ページ番号（デフォルト1）
+  # @param per_page [Integer] 1ページあたりの件数（デフォルト20）
+  # @return [Hash] 検索結果とページネーション情報
+  def self.search(query, page: 1, per_page: 20)
+    return { results: [], total_items: 0, current_page: page, per_page: per_page, total_pages: 0 } if query.blank?
+
+    # ページネーション計算
+    start_index = (page - 1) * per_page
+    current_max = [per_page, 40].min  # Google Books APIの最大値は40
 
     # APIのURLを構築
     uri = URI(BASE_URL)
     params = {
       q: query,                # 検索キーワード
-      maxResults: max_results, # 取得件数
+      maxResults: current_max, # 取得件数
+      startIndex: start_index, # 開始位置
       langRestrict: 'ja'       # 日本語の本に限定
     }
     # APIキーがあれば追加
@@ -25,15 +31,27 @@ class GoogleBooksService
     begin
       # HTTPリクエストを送信
       response = Net::HTTP.get_response(uri)
-      return [] unless response.is_a?(Net::HTTPSuccess)
 
-      # JSONをパースして配列に変換
-      data = JSON.parse(response.body)
-      parse_books(data)
+      if response.is_a?(Net::HTTPSuccess)
+        data = JSON.parse(response.body)
+        results = parse_books(data)
+        total_items = data['totalItems'] || 0
+
+        {
+          results: results,
+          total_items: total_items,
+          current_page: page,
+          per_page: per_page,
+          total_pages: (total_items.to_f / per_page).ceil
+        }
+      else
+        Rails.logger.error("Google Books API Error: #{response.code} - #{response.body}")
+        { results: [], total_items: 0, current_page: page, per_page: per_page, total_pages: 0 }
+      end
     rescue StandardError => e
-      # エラーが発生した場合はログに記録して空配列を返す
+      # エラーが発生した場合はログに記録して空のハッシュを返す
       Rails.logger.error("Google Books API Error: #{e.message}")
-      []
+      { results: [], total_items: 0, current_page: page, per_page: per_page, total_pages: 0 }
     end
   end
 
