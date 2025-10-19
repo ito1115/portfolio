@@ -37,10 +37,21 @@ class BooksController < ApplicationController
   # Google Books APIで書籍を検索
   def search
     @query = params[:query]
-    @books = []
+    @page = params[:page]&.to_i || 1
+    @per_page = 20
 
     if @query.present?
-      @books = GoogleBooksService.search(@query)
+      result = GoogleBooksService.search(@query, page: @page, per_page: @per_page)
+      @books = result[:results]
+      @pagination_info = {
+        total_items: result[:total_items],
+        current_page: result[:current_page],
+        per_page: result[:per_page],
+        total_pages: result[:total_pages]
+      }
+    else
+      @books = []
+      @pagination_info = { total_items: 0, current_page: @page, per_page: @per_page, total_pages: 0 }
     end
   end
 
