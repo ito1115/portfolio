@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_19_013218) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_20_062313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_19_013218) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "purchase_media", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_purchase_media_on_name", unique: true
+  end
+
   create_table "readings", force: :cascade do |t|
     t.text "reason"
     t.integer "status"
@@ -36,7 +44,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_19_013218) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "book_id", null: false
+    t.bigint "purchase_medium_id"
     t.index ["book_id"], name: "index_readings_on_book_id"
+    t.index ["purchase_medium_id"], name: "index_readings_on_purchase_medium_id"
     t.index ["user_id"], name: "index_readings_on_user_id"
   end
 
@@ -53,5 +63,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_19_013218) do
   end
 
   add_foreign_key "readings", "books"
+  add_foreign_key "readings", "purchase_media"
   add_foreign_key "readings", "users"
 end

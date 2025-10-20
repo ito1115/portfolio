@@ -58,6 +58,13 @@
           </div>
         </div>
 
+        <% if @reading.purchase_medium.present? %>
+          <div class="info-row">
+            <label>購入媒体：</label>
+            <span><%= t("purchase_media.#{@reading.purchase_medium.name}", default: @reading.purchase_medium.name.humanize) %></span>
+          </div>
+        <% end %>
+
         <% if @reading.wish_date.present? %>
           <div class="info-row">
             <label>読みたいと思った日：</label>

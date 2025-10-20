@@ -679,6 +679,17 @@ body {
   color: #2E7D32;
 }
 
+.purchase-medium-badge {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+  background: #EFEBE9;
+  color: #6D4C41;
+  margin-left: 8px;
+}
+
 .status-date {
   color: var(--color-text-secondary);
   font-size: 12px;

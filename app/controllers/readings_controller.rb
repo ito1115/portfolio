@@ -3,7 +3,7 @@ class ReadingsController < ApplicationController
   before_action :set_reading, only: [:show, :edit, :update, :destroy]
 
   def index
-    @readings = current_user.readings.includes(:book).order(created_at: :desc)
+    @readings = current_user.readings.includes(:book, :purchase_medium).order(created_at: :desc)
   end
 
   def show
@@ -11,6 +11,7 @@ class ReadingsController < ApplicationController
 
   def new
     @reading = current_user.readings.build
+    @purchase_media = PurchaseMedium.all.order(:id)
     # 書籍検索から遷移してきた場合
     if params[:book_id].present?
       @reading.book_id = params[:book_id]
@@ -29,6 +30,7 @@ class ReadingsController < ApplicationController
   end
 
   def edit
+    @purchase_media = PurchaseMedium.all.order(:id)
   end
 
   def update
@@ -82,6 +84,6 @@ class ReadingsController < ApplicationController
 
   def reading_params
     params.require(:reading).permit(:book_id, :reason, :status, :tsundoku_date,
-                                      :wish_date, :completed_date)
+                                      :wish_date, :completed_date, :purchase_medium_id)
   end
 end

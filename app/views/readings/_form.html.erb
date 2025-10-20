@@ -58,6 +58,34 @@
   </div>
 
   <div class="form-group">
+    <%= form.label :purchase_medium_id, "購入媒体", class: "form-label" %>
+    <div class="purchase-medium-selector">
+      <% @purchase_media.each do |medium| %>
+        <div class="medium-option">
+          <%= form.radio_button :purchase_medium_id, medium.id,
+                                class: "medium-radio",
+                                checked: (reading.purchase_medium_id == medium.id) %>
+          <%= form.label :purchase_medium_id, value: medium.id, class: "medium-label" do %>
+            <span class="medium-name">
+              <%= t("purchase_media.#{medium.name}", default: medium.name.humanize) %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="medium-option">
+        <%= form.radio_button :purchase_medium_id, "",
+                              class: "medium-radio",
+                              checked: reading.purchase_medium_id.blank? %>
+        <%= form.label :purchase_medium_id, value: "", class: "medium-label" do %>
+          <span class="medium-name">未選択</span>
+        <% end %>
+      </div>
+    </div>
+    <small class="form-text">この本をどの媒体で購入したか選択してください（任意）</small>
+  </div>
+
+  <div class="form-group">
     <%= form.label :reason, "読む理由・動機", class: "form-label" %>
     <div class="ai-suggestion-container" id="aiSuggestionContainer" style="display: none;">
       <div class="ai-suggestion-header">
@@ -107,6 +135,61 @@
 <% end %>
 
 <style>
+/* 購入媒体選択のスタイル */
+.purchase-medium-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.medium-option {
+  position: relative;
+}
+
+.medium-radio {
+  position: absolute;
+  opacity: 0;
+}
+
+.medium-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: white;
+  min-width: 100px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.medium-label:hover {
+  border-color: #A1887F;
+  background: #EFEBE9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(141, 110, 99, 0.15);
+}
+
+.medium-radio:checked + .medium-label {
+  border-color: #8D6E63;
+  background: linear-gradient(135deg, #A1887F 0%, #8D6E63 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(141, 110, 99, 0.4);
+}
+
+.medium-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.medium-radio:checked + .medium-label .medium-name {
+  color: white;
+}
+
 /* AI提案機能のスタイル */
 .ai-suggestion-container {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

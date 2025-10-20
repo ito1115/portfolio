@@ -91,6 +91,11 @@
                 end
               %>
               <span class="status-badge <%= status_class %>"><%= status_text %></span>
+              <% if reading.purchase_medium.present? %>
+                <span class="purchase-medium-badge">
+                  <%= t("purchase_media.#{reading.purchase_medium.name}", default: reading.purchase_medium.name.humanize) %>
+                </span>
+              <% end %>
             </div>
             <div class="book-actions">
               <%= link_to "編集", edit_reading_path(reading), class: "btn btn-sm btn-secondary" %>

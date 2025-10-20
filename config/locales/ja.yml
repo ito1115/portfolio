@@ -1,0 +1,7 @@
+ja:
+  purchase_media:
+    paperbook: "紙の本"
+    kindle: "Kindle"
+    rakuten_kobo: "楽天Kobo"
+    doly: "Doly"
+    other: "その他"
