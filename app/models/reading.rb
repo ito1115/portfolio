@@ -1,6 +1,7 @@
 class Reading < ApplicationRecord
   belongs_to :user
   belongs_to :book
+  belongs_to :purchase_medium, optional: true
 
   enum status: {
     wish: 0,             # 気になる
