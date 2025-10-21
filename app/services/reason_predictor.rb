@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 class ReasonPredictor
   # 学習段階の定義
   LEARNING_STAGES = {
-    stage_1: { range: 1..1, personal_weight: 0, general_weight: 100 },      # 1冊目: 一般的なデータのみ
-    stage_2: { range: 2..3, personal_weight: 30, general_weight: 70 },      # 2-3冊目: 個人30% + 一般70%
-    stage_3: { range: 4..Float::INFINITY, personal_weight: 80, general_weight: 20 }  # 4冊目以上: 個人80% + 一般20%
+    stage1: { range: 1..1, personal_weight: 0, general_weight: 100 },      # 1冊目: 一般的なデータのみ
+    stage2: { range: 2..3, personal_weight: 30, general_weight: 70 },      # 2-3冊目: 個人30% + 一般70%
+    stage3: { range: 4..Float::INFINITY, personal_weight: 80, general_weight: 20 } # 4冊目以上: 個人80% + 一般20%
   }.freeze
 
   # 一般的なパターン例
-  GENERAL_PATTERNS = [
-    "仕事のスキルアップのため",
-    "新しい知識を身につけたかった",
-    "友人に勧められた",
-    "趣味で読みたいと思った",
-    "話題の本だったから",
-    "レビューが良かったので購入した"
+  GENERAL_PATTERNS = %w[
+    仕事のスキルアップのため
+    新しい知識を身につけたかった
+    友人に勧められた
+    趣味で読みたいと思った
+    話題の本だったから
+    レビューが良かったので購入した
   ].freeze
 
   class << self
@@ -51,7 +53,7 @@ class ReasonPredictor
       LEARNING_STAGES.each do |stage_name, config|
         return stage_name if config[:range].include?(book_number)
       end
-      :stage_3 # デフォルトは最終段階
+      :stage3 # デフォルトは最終段階
     end
 
     # プロンプトを構築（段階別に重み付け）
@@ -68,14 +70,14 @@ class ReasonPredictor
       prompt += "\n"
 
       # 一般的なデータを含める
-      if config[:general_weight] > 0
+      if config[:general_weight].positive?
         prompt += "【一般的なパターン例（参考）】\n"
         prompt += GENERAL_PATTERNS.join("\n")
         prompt += "\n\n"
       end
 
       # 個人データを含める（段階が進んだら）
-      if config[:personal_weight] > 0
+      if config[:personal_weight].positive?
         user_past_reasons = fetch_user_past_reasons(user)
         if user_past_reasons.present?
           prompt += "【このユーザーの過去の購入理由（参考）】\n"
@@ -103,12 +105,12 @@ class ReasonPredictor
     # フォールバック理由（API失敗時）
     def fallback_reason(stage)
       case stage
-      when :stage_1
+      when :stage1
         GENERAL_PATTERNS.sample
-      when :stage_2
-        "新しい知識を身につけたかった"
-      when :stage_3
-        "過去の傾向から判断した理由"
+      when :stage2
+        '新しい知識を身につけたかった'
+      when :stage3
+        '過去の傾向から判断した理由'
       end
     end
   end

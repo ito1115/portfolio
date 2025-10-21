@@ -1,0 +1,41 @@
+# RuboCop configuration for Rails project
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  SuggestExtensions: false
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/migrate/**/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
+
+# Rails specific configuration
+require:
+  - rubocop-rails
+
+# Relaxed rules for development
+Style/Documentation:
+  Enabled: false
+
+# Increase method length limit for service objects that handle external APIs
+Metrics/MethodLength:
+  Max: 35
+
+# Increase ABC size limit for service objects
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/BlockLength:
+  Exclude:
+    - 'config/**/*'
+    - 'spec/**/*'
+    - 'test/**/*'
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - 'config/**/*'

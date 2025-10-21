@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'json'
 
@@ -14,7 +16,7 @@ class GoogleBooksService
 
     # ページネーション計算
     start_index = (page - 1) * per_page
-    current_max = [per_page, 40].min  # Google Books APIの最大値は40
+    current_max = [per_page, 40].min # Google Books APIの最大値は40
 
     # APIのURLを構築
     uri = URI(BASE_URL)
@@ -63,9 +65,7 @@ class GoogleBooksService
 
     uri = URI("#{BASE_URL}/#{volume_id}")
     # APIキーがあればクエリパラメータに追加
-    if ENV['GOOGLE_BOOKS_API_KEY'].present?
-      uri.query = URI.encode_www_form(key: ENV['GOOGLE_BOOKS_API_KEY'])
-    end
+    uri.query = URI.encode_www_form(key: ENV['GOOGLE_BOOKS_API_KEY']) if ENV['GOOGLE_BOOKS_API_KEY'].present?
 
     begin
       response = Net::HTTP.get_response(uri)
@@ -79,11 +79,9 @@ class GoogleBooksService
     end
   end
 
-  private
-
   # 複数の本のデータを解析
   def self.parse_books(data)
-    return [] unless data['items'].present?
+    return [] if data['items'].blank?
 
     data['items'].map { |item| parse_book(item) }.compact
   end
@@ -92,7 +90,7 @@ class GoogleBooksService
   # Google Books APIのレスポンスから必要な情報を抽出
   def self.parse_book(item)
     volume_info = item['volumeInfo']
-    return nil unless volume_info.present?
+    return nil if volume_info.blank?
 
     {
       google_books_id: item['id'],                              # Google BooksのID
@@ -108,12 +106,12 @@ class GoogleBooksService
 
   # ISBNを抽出（ISBN-13を優先、なければISBN-10）
   def self.extract_isbn(identifiers)
-    return nil unless identifiers.present?
+    return nil if identifiers.blank?
 
-    isbn_13 = identifiers.find { |id| id['type'] == 'ISBN_13' }
-    return isbn_13['identifier'] if isbn_13
+    isbn13 = identifiers.find { |id| id['type'] == 'ISBN_13' }
+    return isbn13['identifier'] if isbn13
 
-    isbn_10 = identifiers.find { |id| id['type'] == 'ISBN_10' }
-    isbn_10&.dig('identifier')
+    isbn10 = identifiers.find { |id| id['type'] == 'ISBN_10' }
+    isbn10&.dig('identifier')
   end
 end

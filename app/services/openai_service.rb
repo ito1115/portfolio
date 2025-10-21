@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OpenaiService
   class << self
     # OpenAI APIを使ってテキスト生成

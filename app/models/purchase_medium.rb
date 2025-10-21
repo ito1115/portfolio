@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PurchaseMedium < ApplicationRecord
   has_many :readings, dependent: :restrict_with_error
 
