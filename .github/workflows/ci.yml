@@ -1,0 +1,98 @@
+# This workflow uses actions that are not certified by GitHub.  They are
+# provided by a third-party and are governed by separate terms of service,
+# privacy policy, and support documentation.
+#
+# This workflow will install a prebuilt Ruby version, install dependencies, and
+# run tests and linters.
+name: "Ruby on Rails CI"
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: graduation_app_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://postgres:password@localhost:5432/graduation_app_test"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.2'
+          bundler-cache: true
+
+      - name: Set up database schema
+        run: bin/rails db:schema:load
+
+      - name: Run tests
+        run: bin/rake
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.2'
+          bundler-cache: true
+
+      # Lintツールがインストールされていない場合はスキップ
+      # 以下のコマンドはGemfileにbundler-audit, brakeman, rubocopがある場合のみ実行されます
+      - name: Check if lint tools are available
+        id: check-lint
+        run: |
+          if grep -q "rubocop" Gemfile; then
+            echo "has_rubocop=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_rubocop=false" >> $GITHUB_OUTPUT
+          fi
+          if grep -q "brakeman" Gemfile; then
+            echo "has_brakeman=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_brakeman=false" >> $GITHUB_OUTPUT
+          fi
+          if grep -q "bundler-audit" Gemfile; then
+            echo "has_bundler_audit=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_bundler_audit=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Security audit dependencies
+        if: steps.check-lint.outputs.has_bundler_audit == 'true'
+        run: |
+          bundle binstubs bundler-audit
+          bin/bundler-audit --update
+
+      - name: Security audit application code
+        if: steps.check-lint.outputs.has_brakeman == 'true'
+        run: |
+          bundle binstubs brakeman
+          bin/brakeman -q -w2
+
+      - name: Lint Ruby files
+        if: steps.check-lint.outputs.has_rubocop == 'true'
+        run: |
+          bundle binstubs rubocop
+          bin/rubocop --parallel
