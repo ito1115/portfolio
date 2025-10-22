@@ -25,7 +25,7 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'Password confirmation', with: 'password123'
       click_button 'Sign up'
 
-      expect(page).to have_content "Emailを入力してください"
+      expect(page).to have_content 'Emailを入力してください'
     end
 
     it 'パスワードが6文字未満の場合、登録できないこと' do
@@ -47,7 +47,7 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'Password confirmation', with: 'different'
       click_button 'Sign up'
 
-      expect(page).to have_content "Passwordが一致しません"
+      expect(page).to have_content 'Passwordが一致しません'
     end
   end
 
