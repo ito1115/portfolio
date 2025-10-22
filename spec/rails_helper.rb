@@ -26,25 +26,25 @@ RSpec.configure do |config|
 
   config.fixture_paths = [Rails.root.join('spec/fixtures')]
 
-  # 各テストをトランザクション内で実行（テスト後に自動ロールバック）
-  config.use_transactional_fixtures = true
+  # DatabaseCleanerを使用するため、use_transactional_fixturesはfalseに設定
+  config.use_transactional_fixtures = false
 
-  # DatabaseCleanerの設定（JavaScriptテストのみ）
+  # DatabaseCleanerの設定（JavaScriptテストおよびシステムテスト）
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.before(:each, js: true) do
-    # JavaScriptテストではトランザクションが使えないため、truncationを使用
-    self.use_transactional_tests = false
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each, js: true) do
+  config.before(:each) do |example|
+    # システムテストまたはJavaScriptテストの場合はtruncationを使用
+    if example.metadata[:type] == :system || example.metadata[:js]
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
     DatabaseCleaner.start
   end
 
-  config.after(:each, js: true) do
+  config.after(:each) do
     DatabaseCleaner.clean
   end
 
@@ -55,12 +55,15 @@ RSpec.configure do |config|
   config.before(:each, type: :system) do
     if ENV['CI']
       # CI環境ではSelenium Serverを使わずにヘッドレスChromeを直接使用
+      puts "Running in CI mode with headless Chrome"
       driven_by :selenium, using: :headless_chrome, screen_size: [1680, 1050] do |driver_options|
         driver_options.add_argument('--no-sandbox')
         driver_options.add_argument('--disable-dev-shm-usage')
+        driver_options.add_argument('--disable-gpu')
       end
     else
       # ローカル環境ではremote_chromeを使用
+      puts "Running in local mode with remote Chrome"
       driven_by :remote_chrome
       Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
       Capybara.server_port = 4444

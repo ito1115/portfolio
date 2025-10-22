@@ -49,6 +49,12 @@ jobs:
       - name: Install ChromeDriver
         uses: nanasess/setup-chromedriver@v2
 
+      - name: Verify Chrome and ChromeDriver installation
+        run: |
+          google-chrome --version
+          chromedriver --version
+          which chromedriver
+
       - name: Set up database schema
         run: bin/rails db:schema:load
 
