@@ -53,10 +53,16 @@ RSpec.configure do |config|
 
   # webdriver設定(capybara)
   config.before(:each, type: :system) do
-    driven_by :remote_chrome
-    Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
-    Capybara.server_port = 4444
-    Capybara.app_host = "http://#{Capybara.server_host}:#{Capybara.server_port}"
+    if ENV['CI']
+      # CI環境ではSelenium Serverを使わずにヘッドレスChromeを直接使用
+      driven_by :selenium, using: :headless_chrome, screen_size: [1680, 1050]
+    else
+      # ローカル環境ではremote_chromeを使用
+      driven_by :remote_chrome
+      Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
+      Capybara.server_port = 4444
+      Capybara.app_host = "http://#{Capybara.server_host}:#{Capybara.server_port}"
+    end
     Capybara.ignore_hidden_elements = false
   end
 end
