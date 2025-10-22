@@ -90,7 +90,9 @@ RSpec.describe '積読本管理', type: :system do
 
       fill_in 'reading[reason]', with: '更新した理由'
       select '積読', from: 'reading[status]'
-      click_on class: 'btn-primary'
+      within('.form-actions') do
+        click_button type: 'submit'
+      end
 
       # 更新後はreadings_pathにリダイレクトされる
       expect(current_path).to eq readings_path
