@@ -1,4 +1,24 @@
 ja:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "バリデーションに失敗しました: %{errors}"
+      models:
+        user:
+          attributes:
+            email:
+              blank: "Emailを入力してください"
+              # taken: セキュリティ上の理由で具体的なメッセージは表示しない
+            password:
+              blank: "Passwordを入力してください"
+              too_short: "Passwordは6文字以上で入力してください"
+            password_confirmation:
+              confirmation: "Passwordが一致しません"
+        reading:
+          attributes:
+            status:
+              blank: "Statusを選択してください"
+
   purchase_media:
     paperbook: "紙の本"
     kindle: "Kindle"

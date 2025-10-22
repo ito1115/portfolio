@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :reading do
     user
     book
-    reason { "This book looks interesting." }
+    reason { 'This book looks interesting.' }
     status { :wish }
     wish_date { Date.current }
 
