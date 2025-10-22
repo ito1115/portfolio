@@ -90,7 +90,7 @@ RSpec.describe '積読本管理', type: :system do
 
       fill_in 'reading[reason]', with: '更新した理由'
       select '積読', from: 'reading[status]'
-      click_button 'Update Reading'
+      click_button commit: 'commit'
 
       # 更新後はreadings_pathにリダイレクトされる
       expect(current_path).to eq readings_path
@@ -105,7 +105,7 @@ RSpec.describe '積読本管理', type: :system do
     it '積読本を削除できること' do
       visit reading_path(reading)
 
-      click_button '削除'
+      click_button '削除', match: :first
 
       # 削除後はreadings_pathにリダイレクトされる
       expect(current_path).to eq readings_path

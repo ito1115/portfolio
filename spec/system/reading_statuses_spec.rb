@@ -16,8 +16,8 @@ RSpec.describe '読書状態管理', type: :system do
 
       visit edit_reading_path(reading)
 
-      select '積読', from: 'reading_status'
-      click_button 'Update Reading'
+      select '積読', from: 'reading[status]'
+      click_button commit: 'commit'
 
       # readings_pathにリダイレクトされて、本が表示されている
       expect(current_path).to eq readings_path
@@ -34,7 +34,7 @@ RSpec.describe '読書状態管理', type: :system do
       visit edit_reading_path(reading)
 
       select '積読卒業', from: 'reading[status]'
-      click_button 'Update Reading'
+      click_button commit: 'commit'
 
       expect(current_path).to eq readings_path
       expect(page).to have_content 'ステータステスト本'
@@ -50,7 +50,7 @@ RSpec.describe '読書状態管理', type: :system do
       visit edit_reading_path(reading)
 
       select '積読卒業', from: 'reading[status]'
-      click_button 'Update Reading'
+      click_button commit: 'commit'
 
       expect(current_path).to eq readings_path
       expect(page).to have_content 'ステータステスト本'

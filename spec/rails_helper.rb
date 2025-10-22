@@ -51,6 +51,9 @@ RSpec.configure do |config|
   # バックトレースからRails gemの行をフィルタリング
   config.filter_rails_from_backtrace!
 
+  # Capybara設定
+  Capybara.default_max_wait_time = 5
+
   # webdriver設定(capybara)
   config.before(:each, type: :system) do
     if ENV['CI']

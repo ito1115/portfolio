@@ -57,9 +57,9 @@ RSpec.describe 'ユーザー認証', type: :system do
     it '有効な情報でログインができること' do
       visit new_user_session_path
 
-      fill_in 'Email', with: user.email
-      fill_in 'Password', with: 'password123'
-      click_button 'Log in'
+      fill_in 'user[email]', with: user.email
+      fill_in 'user[password]', with: 'password123'
+      click_button commit: 'commit'
 
       # ログイン後のページにリダイレクトされる
       expect(current_path).to eq root_path
