@@ -41,10 +41,13 @@ jobs:
           ruby-version: '3.2.2'
           bundler-cache: true
 
-      - name: Install Chrome
+      - name: Install Chrome and ChromeDriver
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
+
+      - name: Install ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
 
       - name: Set up database schema
         run: bin/rails db:schema:load

@@ -55,7 +55,10 @@ RSpec.configure do |config|
   config.before(:each, type: :system) do
     if ENV['CI']
       # CI環境ではSelenium Serverを使わずにヘッドレスChromeを直接使用
-      driven_by :selenium, using: :headless_chrome, screen_size: [1680, 1050]
+      driven_by :selenium, using: :headless_chrome, screen_size: [1680, 1050] do |driver_options|
+        driver_options.add_argument('--no-sandbox')
+        driver_options.add_argument('--disable-dev-shm-usage')
+      end
     else
       # ローカル環境ではremote_chromeを使用
       driven_by :remote_chrome
