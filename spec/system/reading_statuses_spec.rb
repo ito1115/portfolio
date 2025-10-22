@@ -34,7 +34,7 @@ RSpec.describe '読書状態管理', type: :system do
       visit edit_reading_path(reading)
 
       select '積読卒業', from: 'reading[status]'
-      find('input[type="submit"]').click
+      click_on class: 'btn-primary'
 
       expect(current_path).to eq readings_path
       expect(page).to have_content 'ステータステスト本'

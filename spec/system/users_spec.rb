@@ -59,7 +59,7 @@ RSpec.describe 'ユーザー認証', type: :system do
 
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: 'password123'
-      find('input[type="submit"]').click
+      click_on class: 'btn-primary'
 
       # ログイン後のページにリダイレクトされる
       expect(current_path).to eq root_path
