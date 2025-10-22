@@ -36,11 +36,11 @@ RSpec.configure do |config|
 
   config.before(:each) do |example|
     # システムテストまたはJavaScriptテストの場合はtruncationを使用
-    if example.metadata[:type] == :system || example.metadata[:js]
-      DatabaseCleaner.strategy = :truncation
-    else
-      DatabaseCleaner.strategy = :transaction
-    end
+    DatabaseCleaner.strategy = if example.metadata[:type] == :system || example.metadata[:js]
+                                 :truncation
+                               else
+                                 :transaction
+                               end
     DatabaseCleaner.start
   end
 
@@ -55,7 +55,6 @@ RSpec.configure do |config|
   config.before(:each, type: :system) do
     if ENV['CI']
       # CI環境ではSelenium Serverを使わずにヘッドレスChromeを直接使用
-      puts "Running in CI mode with headless Chrome"
       driven_by :selenium, using: :headless_chrome, screen_size: [1680, 1050] do |driver_options|
         driver_options.add_argument('--no-sandbox')
         driver_options.add_argument('--disable-dev-shm-usage')
@@ -63,7 +62,6 @@ RSpec.configure do |config|
       end
     else
       # ローカル環境ではremote_chromeを使用
-      puts "Running in local mode with remote Chrome"
       driven_by :remote_chrome
       Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
       Capybara.server_port = 4444
