@@ -33,7 +33,9 @@ RSpec.describe '読書状態管理', type: :system do
 
       visit edit_reading_path(reading)
 
-      select '積読卒業', from: 'reading[status]'
+      # selectの代わりにfindで直接option要素を選択
+      find('select[name="reading[status]"]').find('option[value="completed"]').select_option
+
       within('.form-actions') do
         click_button type: 'submit'
       end
@@ -51,7 +53,9 @@ RSpec.describe '読書状態管理', type: :system do
 
       visit edit_reading_path(reading)
 
-      select '積読卒業', from: 'reading[status]'
+      # selectの代わりにfindで直接option要素を選択
+      find('select[name="reading[status]"]').find('option[value="completed"]').select_option
+
       within('.form-actions') do
         click_button type: 'submit'
       end

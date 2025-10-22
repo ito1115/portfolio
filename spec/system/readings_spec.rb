@@ -107,7 +107,10 @@ RSpec.describe '積読本管理', type: :system do
     it '積読本を削除できること' do
       visit reading_path(reading)
 
-      click_button '削除', match: :first
+      # 確認ダイアログを自動的に受け入れる
+      accept_confirm do
+        click_button '削除'
+      end
 
       # 削除後はreadings_pathにリダイレクトされる
       expect(current_path).to eq readings_path
