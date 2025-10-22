@@ -33,11 +33,21 @@ RSpec.describe '読書状態管理', type: :system do
 
       visit edit_reading_path(reading)
 
-      # selectの代わりにfindで直接option要素を選択
-      find('select[name="reading[status]"]').find('option[value="completed"]').select_option
+      # デバッグ: 選択前の状態
+      puts "Before select - field value: #{find_field('reading[status]').value}"
+      puts "Available options: #{page.all('select[name=\"reading[status]\"] option').map(&:text).join(', ')}"
 
-      within('.form-actions') do
-        click_button type: 'submit'
+      select '積読卒業', from: 'reading[status]'
+
+      # デバッグ: 選択後の状態
+      puts "After select - field value: #{find_field('reading[status]').value}"
+
+      find('input[type="submit"]').click
+
+      # デバッグ: 送信後の状態
+      puts "After submit - current path: #{current_path}"
+      if page.has_css?('.error-messages')
+        puts "Errors: #{page.find('.error-messages').text}"
       end
 
       expect(current_path).to eq readings_path
@@ -53,12 +63,8 @@ RSpec.describe '読書状態管理', type: :system do
 
       visit edit_reading_path(reading)
 
-      # selectの代わりにfindで直接option要素を選択
-      find('select[name="reading[status]"]').find('option[value="completed"]').select_option
-
-      within('.form-actions') do
-        click_button type: 'submit'
-      end
+      select '積読卒業', from: 'reading[status]'
+      find('input[type="submit"]').click
 
       expect(current_path).to eq readings_path
       expect(page).to have_content 'ステータステスト本'

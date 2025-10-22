@@ -62,6 +62,8 @@ RSpec.configure do |config|
         driver_options.add_argument('--no-sandbox')
         driver_options.add_argument('--disable-dev-shm-usage')
         driver_options.add_argument('--disable-gpu')
+        # JavaScriptのconfirmダイアログを有効化（デフォルトで動作するはず）
+        driver_options.add_argument('--enable-features=NetworkService,NetworkServiceInProcess')
       end
     else
       # ローカル環境ではremote_chromeを使用

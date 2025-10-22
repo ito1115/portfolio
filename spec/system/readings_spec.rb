@@ -90,9 +90,15 @@ RSpec.describe '積読本管理', type: :system do
 
       fill_in 'reading[reason]', with: '更新した理由'
       select '積読', from: 'reading[status]'
-      within('.form-actions') do
-        click_button type: 'submit'
+      find('input[type="submit"]').click
+
+      # デバッグ: ページの内容を確認
+      puts "Current path: #{current_path}"
+      if page.has_css?('.error-messages')
+        puts "Validation errors:"
+        puts page.find('.error-messages').text
       end
+      puts "Page body excerpt: #{page.body[0..500]}"
 
       # 更新後はreadings_pathにリダイレクトされる
       expect(current_path).to eq readings_path
@@ -107,8 +113,8 @@ RSpec.describe '積読本管理', type: :system do
     it '積読本を削除できること' do
       visit reading_path(reading)
 
-      # 確認ダイアログを自動的に受け入れる
-      accept_confirm do
+      # 確認ダイアログを受け入れて削除
+      accept_confirm '本当に削除しますか？' do
         click_button '削除'
       end
 
