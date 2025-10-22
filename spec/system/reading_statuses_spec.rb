@@ -35,7 +35,7 @@ RSpec.describe '読書状態管理', type: :system do
 
       # デバッグ: 選択前の状態
       puts "Before select - field value: #{find_field('reading[status]').value}"
-      puts "Available options: #{page.all('select[name=\"reading[status]\"] option').map(&:text).join(', ')}"
+      puts "Available options: #{page.all('select#reading_status option').map(&:text).join(', ')}"
 
       select '積読卒業', from: 'reading[status]'
 
@@ -48,6 +48,9 @@ RSpec.describe '読書状態管理', type: :system do
       puts "After submit - current path: #{current_path}"
       if page.has_css?('.error-messages')
         puts "Errors: #{page.find('.error-messages').text}"
+      end
+      if page.has_css?('.alert')
+        puts "Alert: #{page.find('.alert').text}"
       end
 
       expect(current_path).to eq readings_path

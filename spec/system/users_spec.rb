@@ -59,7 +59,13 @@ RSpec.describe 'ユーザー認証', type: :system do
 
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: 'password123'
-      click_on class: 'btn-primary'
+
+      # デバッグ
+      puts "About to click submit button"
+      puts "Submit buttons found: #{page.all('input[type=\"submit\"]').count}"
+      puts "Buttons with btn-primary: #{page.all('.btn-primary').count}"
+
+      find('input[type="submit"]').click
 
       # ログイン後のページにリダイレクトされる
       expect(current_path).to eq root_path
