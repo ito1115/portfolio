@@ -92,16 +92,8 @@ RSpec.describe '積読本管理', type: :system do
       select '積読', from: 'reading[status]'
       find('input[type="submit"]').click
 
-      # デバッグ: ページの内容を確認
-      puts "Current path: #{current_path}"
-      if page.has_css?('.error-messages')
-        puts 'Validation errors:'
-        puts page.find('.error-messages').text
-      end
-      puts "Page body excerpt: #{page.body[0..500]}"
-
       # 更新後はreadings_pathにリダイレクトされる
-      expect(current_path).to eq readings_path
+      expect(page).to have_current_path(readings_path, wait: 5)
       expect(page).to have_content book.title
       expect(page).to have_content '積読'
     end
@@ -114,13 +106,17 @@ RSpec.describe '積読本管理', type: :system do
       visit reading_path(reading)
 
       # data-turbo-confirm属性を削除してから削除ボタンをクリック
-      page.execute_script(
-        "document.querySelector('form[action*=\"/readings/\"]').removeAttribute('data-turbo-confirm')"
-      )
+      page.execute_script(<<~JS)
+        const deleteButton = document.querySelector('input[value="削除"]');
+        if (deleteButton) {
+          deleteButton.removeAttribute('data-turbo-confirm');
+        }
+      JS
+
       click_button '削除'
 
       # 削除後はreadings_pathにリダイレクトされる
-      expect(current_path).to eq readings_path
+      expect(page).to have_current_path(readings_path, wait: 5)
       expect(page).not_to have_content book.title
     end
   end
