@@ -7,6 +7,15 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <!-- Stimulus Autocomplete -->
+    <script type="module">
+      import Autocomplete from 'https://cdn.skypack.dev/stimulus-autocomplete';
+      import { Application } from 'https://cdn.skypack.dev/@hotwired/stimulus';
+
+      const application = Application.start();
+      application.register('autocomplete', Autocomplete);
+    </script>
   </head>
 
   <body>

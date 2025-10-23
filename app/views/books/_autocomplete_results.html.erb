@@ -1,0 +1,16 @@
+<% suggestions.each do |suggestion| %>
+  <li role="option" data-autocomplete-value="<%= suggestion[:title] %>" class="autocomplete-item">
+    <% if suggestion[:image_url].present? %>
+      <img src="<%= suggestion[:image_url] %>" alt="<%= suggestion[:title] %>" class="autocomplete-book-image">
+    <% else %>
+      <div class="autocomplete-no-image">画像なし</div>
+    <% end %>
+    <div class="autocomplete-book-info">
+      <strong><%= suggestion[:title] %></strong>
+      <% if suggestion[:author].present? %>
+        <br>
+        <small style="color: #666;"><%= suggestion[:author] %></small>
+      <% end %>
+    </div>
+  </li>
+<% end %>
