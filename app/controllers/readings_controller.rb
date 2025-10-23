@@ -30,7 +30,8 @@ class ReadingsController < ApplicationController
     if @reading.save
       redirect_to @reading, notice: t('flash.readings.create.success')
     else
-      render :new
+      @purchase_media = PurchaseMedium.order(:id)
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -46,7 +47,8 @@ class ReadingsController < ApplicationController
     elsif params[:reading][:status].present?
       redirect_to readings_path, alert: t('flash.readings.update.failure')
     else
-      render :edit
+      @purchase_media = PurchaseMedium.order(:id)
+      render :edit, status: :unprocessable_entity
     end
   end
 

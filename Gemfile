@@ -58,6 +58,8 @@ group :development, :test do
   gem 'brakeman', require: false
   gem 'bundler-audit', require: false
   gem 'debug', platforms: %i[mri windows]
+  gem 'factory_bot_rails'
+  gem 'rspec-rails'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
 end
@@ -76,5 +78,7 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
+  gem 'database_cleaner-active_record'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
 end
