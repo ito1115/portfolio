@@ -62,8 +62,21 @@ RSpec.describe '読書状態管理', type: :system do
 
       visit edit_reading_path(reading)
 
+      # デバッグ: 選択前の状態
+      puts "Before select - field value: #{find_field('reading[status]').value}"
+      puts "Available options: #{page.all('select#reading_status option').map(&:text).join(', ')}"
+
       select '積読卒業', from: 'reading[status]'
+
+      # デバッグ: 選択後の状態
+      puts "After select - field value: #{find_field('reading[status]').value}"
+
       find('input[type="submit"]').click
+
+      # デバッグ: 送信後の状態
+      puts "After submit - current path: #{current_path}"
+      puts "Errors: #{page.find('.error-messages').text}" if page.has_css?('.error-messages')
+      puts "Alert: #{page.find('.alert').text}" if page.has_css?('.alert')
 
       expect(current_path).to eq readings_path
       expect(page).to have_content 'ステータステスト本'

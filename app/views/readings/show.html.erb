@@ -106,7 +106,7 @@
       <div class="book-actions" style="margin-top: 30px;">
         <%= link_to "編集", edit_reading_path(@reading), class: "btn btn-primary" %>
         <%= button_to "削除", @reading, method: :delete,
-                      form: { data: { turbo_confirm: "本当に削除しますか？" } },
+                      data: { turbo_confirm: "本当に削除しますか？" },
                       class: "btn btn-danger" %>
       </div>
     </div>

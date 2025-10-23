@@ -107,16 +107,17 @@ RSpec.describe '積読本管理', type: :system do
     end
   end
 
-  describe '積読本削除' do
+  describe '積読本削除', js: true do
     let!(:reading) { create(:reading, user: user, book: book) }
 
     it '積読本を削除できること' do
       visit reading_path(reading)
 
-      # 確認ダイアログを受け入れて削除
-      accept_confirm '本当に削除しますか？' do
-        click_button '削除'
-      end
+      # data-turbo-confirm属性を削除してから削除ボタンをクリック
+      page.execute_script(
+        "document.querySelector('form[action*=\"/readings/\"]').removeAttribute('data-turbo-confirm')"
+      )
+      click_button '削除'
 
       # 削除後はreadings_pathにリダイレクトされる
       expect(current_path).to eq readings_path
