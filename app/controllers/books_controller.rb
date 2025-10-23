@@ -57,6 +57,28 @@ class BooksController < ApplicationController
     end
   end
 
+  # オートコンプリート用のAPI
+  def autocomplete
+    # Stimulus Autocompleteは'q'パラメータを使う
+    query = params[:q] || params[:query]
+
+    if query.present?
+      result = GoogleBooksService.search(query, page: 1, per_page: 3)
+      @suggestions = result[:results].map do |book|
+        {
+          title: book[:title],
+          author: book[:author],
+          image_url: book[:image_url]
+        }
+      end
+    else
+      @suggestions = []
+    end
+
+    # HTML形式でレスポンスを返す
+    render partial: 'books/autocomplete_results', locals: { suggestions: @suggestions }
+  end
+
   # Google Books APIの結果から書籍をDBに保存
   def create_from_google_books
     book_params = params.expect(
