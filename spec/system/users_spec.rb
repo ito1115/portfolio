@@ -25,7 +25,8 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'Password confirmation', with: 'password123'
       click_button 'Sign up'
 
-      expect(page).to have_content 'Emailを入力してください'
+      # バリデーションエラーでページが再表示されるのを待つ
+      expect(page).to have_content('Emailを入力してください', wait: 5)
     end
 
     it 'パスワードが6文字未満の場合、登録できないこと' do
@@ -36,7 +37,8 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'Password confirmation', with: '12345'
       click_button 'Sign up'
 
-      expect(page).to have_content 'Passwordは6文字以上で入力してください'
+      # バリデーションエラーでページが再表示されるのを待つ
+      expect(page).to have_content('Passwordは6文字以上で入力してください', wait: 5)
     end
 
     it 'パスワードと確認用パスワードが一致しない場合、登録できないこと' do
@@ -47,7 +49,8 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'Password confirmation', with: 'different'
       click_button 'Sign up'
 
-      expect(page).to have_content 'Passwordが一致しません'
+      # バリデーションエラーでページが再表示されるのを待つ
+      expect(page).to have_content('Passwordが一致しません', wait: 5)
     end
   end
 
