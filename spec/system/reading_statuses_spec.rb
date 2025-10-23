@@ -46,12 +46,8 @@ RSpec.describe '読書状態管理', type: :system do
 
       # デバッグ: 送信後の状態
       puts "After submit - current path: #{current_path}"
-      if page.has_css?('.error-messages')
-        puts "Errors: #{page.find('.error-messages').text}"
-      end
-      if page.has_css?('.alert')
-        puts "Alert: #{page.find('.alert').text}"
-      end
+      puts "Errors: #{page.find('.error-messages').text}" if page.has_css?('.error-messages')
+      puts "Alert: #{page.find('.alert').text}" if page.has_css?('.alert')
 
       expect(current_path).to eq readings_path
       expect(page).to have_content 'ステータステスト本'

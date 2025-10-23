@@ -95,7 +95,7 @@ RSpec.describe '積読本管理', type: :system do
       # デバッグ: ページの内容を確認
       puts "Current path: #{current_path}"
       if page.has_css?('.error-messages')
-        puts "Validation errors:"
+        puts 'Validation errors:'
         puts page.find('.error-messages').text
       end
       puts "Page body excerpt: #{page.body[0..500]}"

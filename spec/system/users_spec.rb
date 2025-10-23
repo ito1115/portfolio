@@ -61,7 +61,7 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'user[password]', with: 'password123'
 
       # デバッグ
-      puts "About to click submit button"
+      puts 'About to click submit button'
       puts "Submit buttons found: #{page.all('input[type=\"submit\"]').count}"
       puts "Buttons with btn-primary: #{page.all('.btn-primary').count}"
 
