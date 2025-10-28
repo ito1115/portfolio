@@ -60,15 +60,9 @@ RSpec.describe 'ユーザー認証', type: :system do
     it '有効な情報でログインができること' do
       visit new_user_session_path
 
-      fill_in 'user[email]', with: user.email
-      fill_in 'user[password]', with: 'password123'
-
-      # デバッグ
-      puts 'About to click submit button'
-      puts "Submit buttons found: #{page.all('input[type=\"submit\"]').count}"
-      puts "Buttons with btn-primary: #{page.all('.btn-primary').count}"
-
-      find('input[type="submit"]').click
+      fill_in 'Email', with: user.email
+      fill_in 'Password', with: 'password123'
+      click_button 'Log in'
 
       # ログイン後のページにリダイレクトされる
       expect(current_path).to eq root_path

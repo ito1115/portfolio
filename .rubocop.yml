@@ -14,7 +14,7 @@ AllCops:
     - 'log/**/*'
 
 # Rails specific configuration
-require:
+plugins:
   - rubocop-rails
 
 # Relaxed rules for development
