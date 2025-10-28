@@ -64,9 +64,9 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'Password', with: 'password123'
       click_button 'Log in'
 
-      # ログイン後のページにリダイレクトされる
+      # ログイン後のページ要素が表示されるまで待機
+      expect(page).to have_content "Welcome, #{user.email}!", wait: 10
       expect(current_path).to eq root_path
-      expect(page).to have_content "Welcome, #{user.email}!"
     end
 
     it 'メールアドレスが間違っている場合、ログインできないこと' do
