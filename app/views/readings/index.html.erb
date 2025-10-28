@@ -91,6 +91,9 @@
                 end
               %>
               <span class="status-badge <%= status_class %>"><%= status_text %></span>
+              <% if reading.maturity_badge_with_icon.present? %>
+                <span class="maturity-badge"><%= reading.maturity_badge_with_icon %></span>
+              <% end %>
               <% if reading.purchase_medium.present? %>
                 <span class="purchase-medium-badge">
                   <%= t("purchase_media.#{reading.purchase_medium.name}", default: reading.purchase_medium.name.humanize) %>

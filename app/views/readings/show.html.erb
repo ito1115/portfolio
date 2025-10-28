@@ -55,6 +55,9 @@
             <span class="status-badge <%= status_class %>">
               <%= status_text %>
             </span>
+            <% if @reading.maturity_badge_with_icon.present? %>
+              <span class="maturity-badge"><%= @reading.maturity_badge_with_icon %></span>
+            <% end %>
           </div>
         </div>
 
@@ -75,7 +78,12 @@
         <% if @reading.tsundoku_date.present? %>
           <div class="info-row">
             <label>積読開始日：</label>
-            <span><%= @reading.tsundoku_date.strftime("%Y年%m月%d日") %></span>
+            <span>
+              <%= @reading.tsundoku_date.strftime("%Y年%m月%d日") %>
+              <% if @reading.maturity_days.present? %>
+                （<%= @reading.maturity_days %>日経過）
+              <% end %>
+            </span>
           </div>
         <% end %>
 
