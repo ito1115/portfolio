@@ -14,7 +14,7 @@ AllCops:
     - 'log/**/*'
 
 # Rails specific configuration
-require:
+plugins:
   - rubocop-rails
 
 # Relaxed rules for development
@@ -28,6 +28,10 @@ Metrics/MethodLength:
 # Increase ABC size limit for service objects
 Metrics/AbcSize:
   Max: 30
+
+# Allow higher complexity for business logic methods (e.g., aging_display with 6 rank levels)
+Metrics/CyclomaticComplexity:
+  Max: 8
 
 Metrics/BlockLength:
   Exclude:

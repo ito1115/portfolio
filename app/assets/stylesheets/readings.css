@@ -690,6 +690,17 @@ body {
   margin-left: 8px;
 }
 
+.maturity-badge {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+  background: #F3E5F5;
+  color: #6A1B9A;
+  margin-left: 8px;
+}
+
 .status-date {
   color: var(--color-text-secondary);
   font-size: 12px;
