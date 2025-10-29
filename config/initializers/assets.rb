@@ -12,3 +12,6 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
+
+# OGP画像をプリコンパイル対象に追加
+Rails.application.config.assets.precompile += %w[ogp.jpg]
