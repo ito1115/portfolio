@@ -61,7 +61,9 @@
             <% if reading.book&.image_url.present? %>
               <%= image_tag reading.book.image_url, alt: reading.book.title %>
             <% else %>
-              <%= image_tag "https://via.placeholder.com/100x133/F5F5F7/86868B?text=No+Image", alt: "画像なし" %>
+              <div class="no-image-placeholder">
+                <span>No Image</span>
+              </div>
             <% end %>
           </div>
           <div class="reading-content">

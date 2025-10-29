@@ -92,6 +92,10 @@ class GoogleBooksService
     volume_info = item['volumeInfo']
     return nil if volume_info.blank?
 
+    # 画像URLを取得し、HTTPをHTTPSに変換（Mixed Content対策）
+    image_url = volume_info.dig('imageLinks', 'thumbnail')
+    image_url = image_url&.sub(/^http:/, 'https:')
+
     {
       google_books_id: item['id'],                              # Google BooksのID
       title: volume_info['title'],                              # タイトル
@@ -100,7 +104,7 @@ class GoogleBooksService
       published_date: volume_info['publishedDate'],             # 出版日
       description: volume_info['description'],                  # 説明文
       isbn: extract_isbn(volume_info['industryIdentifiers']),   # ISBN
-      image_url: volume_info.dig('imageLinks', 'thumbnail')     # サムネイル画像URL
+      image_url: image_url                                      # サムネイル画像URL（HTTPS）
     }
   end
 

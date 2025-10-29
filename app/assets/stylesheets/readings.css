@@ -421,6 +421,24 @@ body {
   background: #F5F5F5;
 }
 
+.no-image-placeholder {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: #F5F5F7;
+  border: 2px dashed #E5E5E7;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-image-placeholder span {
+  color: #86868B;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+}
+
 /* コンテンツ部分 */
 .reading-content {
   flex-grow: 1;
