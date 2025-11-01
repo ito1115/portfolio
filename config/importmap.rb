@@ -6,3 +6,5 @@ pin 'application'
 pin 'stimulus' # @3.2.2
 pin 'stimulus-autocomplete' # @3.1.0
 pin '@hotwired/stimulus', to: '@hotwired--stimulus.js' # @3.2.2
+pin 'quagga', to: 'quagga.js' # @1.8.4 (QuaggaJS - Barcode Scanner)
+pin_all_from 'app/javascript/controllers', under: 'controllers'

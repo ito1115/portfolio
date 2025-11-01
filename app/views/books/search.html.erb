@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" data-controller="barcode-scanner">
   <div class="header">
     <h1>本を検索</h1>
     <div class="header-actions">
@@ -9,7 +9,7 @@
 
   <div class="search-form">
     <%= form_with url: search_books_path, method: :get, local: true, class: "search-form-inner" do |form| %>
-      <%= form.label :query, "タイトル・著者名", class: "search-label" %>
+      <%= form.label :query, "タイトル・著者名・ISBN", class: "search-label" %>
       <div class="search-input-wrapper"
            data-controller="autocomplete"
            data-autocomplete-url-value="<%= autocomplete_books_path %>">
@@ -17,12 +17,38 @@
                             value: @query,
                             placeholder: "例：吾輩は猫である",
                             class: "search-input",
-                            data: { autocomplete_target: "input" },
+                            data: {
+                              autocomplete_target: "input",
+                              barcode_scanner_target: "input"
+                            },
                             autocomplete: "off" %>
         <ul class="autocomplete-results" data-autocomplete-target="results"></ul>
       </div>
       <%= form.submit "検索", class: "btn btn-primary" %>
+      <button type="button"
+              class="btn btn-barcode"
+              data-action="click->barcode-scanner#startScan">
+        📷 バーコード
+      </button>
     <% end %>
+  </div>
+
+  <!-- バーコードスキャナーモーダル -->
+  <div class="barcode-modal" data-barcode-scanner-target="modal">
+    <div class="barcode-modal-content">
+      <div class="barcode-modal-header">
+        <h2>バーコードスキャン</h2>
+        <button type="button"
+                class="barcode-modal-close"
+                data-action="click->barcode-scanner#closeModal">
+          ×
+        </button>
+      </div>
+      <div class="barcode-scanner-container">
+        <div id="barcode-scanner" data-barcode-scanner-target="scanner"></div>
+      </div>
+      <div class="barcode-status" data-barcode-scanner-target="status"></div>
+    </div>
   </div>
 
   <% if @query.present? %>
@@ -594,6 +620,147 @@
 .page-item.disabled .page-link:hover {
   transform: none;
   background: #f8f9fa;
+}
+
+/* バーコードボタン */
+.btn-barcode {
+  background-color: #28a745;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.btn-barcode:hover {
+  background-color: #218838;
+}
+
+/* バーコードスキャナーモーダル */
+.barcode-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.barcode-modal.active {
+  display: flex;
+}
+
+.barcode-modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+  max-width: 90%;
+  max-height: 90%;
+  width: 640px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.barcode-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+  background: #f8f9fa;
+}
+
+.barcode-modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.barcode-modal-close {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #666;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.barcode-modal-close:hover {
+  color: #000;
+}
+
+.barcode-scanner-container {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  background: #000;
+  overflow: hidden;
+}
+
+#barcode-scanner {
+  width: 100%;
+  height: 100%;
+}
+
+#barcode-scanner video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#barcode-scanner canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* バーコード検出ガイド */
+#barcode-scanner canvas.drawingBuffer {
+  border: 3px solid rgba(255, 0, 0, 0.5);
+}
+
+.barcode-status {
+  padding: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+  .barcode-modal-content {
+    width: 95%;
+    max-width: none;
+  }
+
+  .barcode-scanner-container {
+    height: 360px;
+  }
+
+  .btn-barcode {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>
 
