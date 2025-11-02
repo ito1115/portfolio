@@ -12,51 +12,16 @@ class GoogleBooksService
   # @param per_page [Integer] 1ページあたりの件数（デフォルト20）
   # @return [Hash] 検索結果とページネーション情報
   def self.search(query, page: 1, per_page: 20)
-    return { results: [], total_items: 0, current_page: page, per_page: page, total_pages: 0 } if query.blank?
+    return empty_result(page, per_page) if query.blank?
 
-    # ページネーション計算
-    start_index = (page - 1) * per_page
-    current_max = [per_page, 40].min # Google Books APIの最大値は40
-
-    # ISBNかどうかを判定し、適切な検索クエリを構築
-    search_query = format_search_query(query)
-
-    # APIのURLを構築
-    uri = URI(BASE_URL)
-    params = {
-      q: search_query,         # 検索キーワード（ISBNの場合はisbn:プレフィックス付き）
-      maxResults: current_max, # 取得件数
-      startIndex: start_index, # 開始位置
-      langRestrict: 'ja'       # 日本語の本に限定
-    }
-    # APIキーがあれば追加
-    params[:key] = ENV['GOOGLE_BOOKS_API_KEY'] if ENV['GOOGLE_BOOKS_API_KEY'].present?
-    uri.query = URI.encode_www_form(params)
+    uri = build_search_uri(query, page, per_page)
 
     begin
-      # HTTPリクエストを送信
       response = Net::HTTP.get_response(uri)
-
-      if response.is_a?(Net::HTTPSuccess)
-        data = JSON.parse(response.body)
-        results = parse_books(data)
-        total_items = data['totalItems'] || 0
-
-        {
-          results: results,
-          total_items: total_items,
-          current_page: page,
-          per_page: per_page,
-          total_pages: (total_items.to_f / per_page).ceil
-        }
-      else
-        Rails.logger.error("Google Books API Error: #{response.code} - #{response.body}")
-        { results: [], total_items: 0, current_page: page, per_page: per_page, total_pages: 0 }
-      end
+      process_response(response, page, per_page)
     rescue StandardError => e
-      # エラーが発生した場合はログに記録して空のハッシュを返す
       Rails.logger.error("Google Books API Error: #{e.message}")
-      { results: [], total_items: 0, current_page: page, per_page: per_page, total_pages: 0 }
+      empty_result(page, per_page)
     end
   end
 
@@ -132,5 +97,48 @@ class GoogleBooksService
       # 通常のキーワード検索
       query
     end
+  end
+
+  # 検索用URIを構築
+  def self.build_search_uri(query, page, per_page)
+    start_index = (page - 1) * per_page
+    current_max = [per_page, 40].min
+    search_query = format_search_query(query)
+
+    uri = URI(BASE_URL)
+    params = {
+      q: search_query,
+      maxResults: current_max,
+      startIndex: start_index,
+      langRestrict: 'ja'
+    }
+    params[:key] = ENV['GOOGLE_BOOKS_API_KEY'] if ENV['GOOGLE_BOOKS_API_KEY'].present?
+    uri.query = URI.encode_www_form(params)
+    uri
+  end
+
+  # APIレスポンスを処理
+  def self.process_response(response, page, per_page)
+    unless response.is_a?(Net::HTTPSuccess)
+      Rails.logger.error("Google Books API Error: #{response.code} - #{response.body}")
+      return empty_result(page, per_page)
+    end
+
+    data = JSON.parse(response.body)
+    results = parse_books(data)
+    total_items = data['totalItems'] || 0
+
+    {
+      results: results,
+      total_items: total_items,
+      current_page: page,
+      per_page: per_page,
+      total_pages: (total_items.to_f / per_page).ceil
+    }
+  end
+
+  # 空の検索結果を返す
+  def self.empty_result(page, per_page)
+    { results: [], total_items: 0, current_page: page, per_page: per_page, total_pages: 0 }
   end
 end
