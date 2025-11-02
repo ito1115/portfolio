@@ -101,8 +101,15 @@ export default class extends Controller {
 
   // ISBNの簡易バリデーション
   isValidISBN(code) {
-    // 13桁（ISBN-13）または10桁（ISBN-10）
-    return /^\d{13}$/.test(code) || /^\d{10}$/.test(code)
+    // ISBN-13: 978または979で始まる13桁
+    if (/^(978|979)\d{10}$/.test(code)) {
+      return true
+    }
+    // ISBN-10: 10桁（数字9桁+数字またはX）
+    if (/^\d{9}[\dX]$/i.test(code)) {
+      return true
+    }
+    return false
   }
 
   // ビープ音を鳴らす

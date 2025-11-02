@@ -7,21 +7,24 @@ class GoogleBooksService
   BASE_URL = 'https://www.googleapis.com/books/v1/volumes'
 
   # 本を検索するメソッド（ページネーション対応）
-  # @param query [String] 検索キーワード（タイトル、著者名など）
+  # @param query [String] 検索キーワード（タイトル、著者名、ISBNなど）
   # @param page [Integer] ページ番号（デフォルト1）
   # @param per_page [Integer] 1ページあたりの件数（デフォルト20）
   # @return [Hash] 検索結果とページネーション情報
   def self.search(query, page: 1, per_page: 20)
-    return { results: [], total_items: 0, current_page: page, per_page: per_page, total_pages: 0 } if query.blank?
+    return { results: [], total_items: 0, current_page: page, per_page: page, total_pages: 0 } if query.blank?
 
     # ページネーション計算
     start_index = (page - 1) * per_page
     current_max = [per_page, 40].min # Google Books APIの最大値は40
 
+    # ISBNかどうかを判定し、適切な検索クエリを構築
+    search_query = format_search_query(query)
+
     # APIのURLを構築
     uri = URI(BASE_URL)
     params = {
-      q: query,                # 検索キーワード
+      q: search_query,         # 検索キーワード（ISBNの場合はisbn:プレフィックス付き）
       maxResults: current_max, # 取得件数
       startIndex: start_index, # 開始位置
       langRestrict: 'ja'       # 日本語の本に限定
@@ -117,5 +120,17 @@ class GoogleBooksService
 
     isbn10 = identifiers.find { |id| id['type'] == 'ISBN_10' }
     isbn10&.dig('identifier')
+  end
+
+  # 検索クエリをフォーマット（ISBNの場合は特別な処理）
+  def self.format_search_query(query)
+    # ISBNかどうかを判定（13桁で978/979始まり、または10桁）
+    if query.match?(/^(978|979)\d{10}$/) || query.match?(/^\d{9}[\dX]$/i)
+      # ISBNの場合は isbn: プレフィックスを付けて検索精度を上げる
+      "isbn:#{query}"
+    else
+      # 通常のキーワード検索
+      query
+    end
   end
 end
