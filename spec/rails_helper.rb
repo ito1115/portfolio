@@ -52,7 +52,8 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   # Capybara設定
-  Capybara.default_max_wait_time = 5
+  # CI環境では処理が遅くなるため、待機時間を長めに設定
+  Capybara.default_max_wait_time = ENV['CI'] ? 15 : 5
 
   # webdriver設定(capybara)
   config.before(:each, type: :system) do
@@ -65,6 +66,9 @@ RSpec.configure do |config|
         # JavaScriptのconfirmダイアログを有効化（デフォルトで動作するはず）
         driver_options.add_argument('--enable-features=NetworkService,NetworkServiceInProcess')
       end
+      # CI環境ではSeleniumのタイムアウトも延長
+      Capybara.current_session.driver.browser.manage.timeouts.implicit_wait = 15
+      Capybara.current_session.driver.browser.manage.timeouts.page_load = 30
     else
       # ローカル環境ではremote_chromeを使用
       driven_by :remote_chrome
