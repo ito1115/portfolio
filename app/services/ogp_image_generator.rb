@@ -82,13 +82,21 @@ class OgpImageGenerator
   end
 
   def fetch_cover_image
-    return nil unless @book.image_url.present?
+    unless @book.image_url.present?
+      Rails.logger.info "OGP: 書籍に画像URLがありません (Reading #{@reading.id})"
+      return nil
+    end
+
+    Rails.logger.info "OGP: 表紙画像を取得中... URL: #{@book.image_url}"
 
     URI.parse(@book.image_url).open do |file|
-      MiniMagick::Image.read(file)
+      image = MiniMagick::Image.read(file)
+      Rails.logger.info "OGP: 表紙画像の取得に成功 (#{image.width}x#{image.height})"
+      image
     end
   rescue StandardError => e
-    Rails.logger.error "表紙画像の取得に失敗: #{e.message}"
+    Rails.logger.error "OGP: 表紙画像の取得に失敗: #{e.class} - #{e.message}"
+    Rails.logger.error e.backtrace.first(5).join("\n")
     nil
   end
 
