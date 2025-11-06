@@ -2,7 +2,7 @@
 
 # OGP画像を動的に生成・配信するコントローラー
 class OgpImagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:show]
+  skip_before_action :authenticate_user!, only: [:show], raise: false
 
   def show
     reading = Reading.find(params[:id])
