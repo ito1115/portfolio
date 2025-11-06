@@ -18,7 +18,7 @@ class OgpImageGenerator
   FONT_PATH = Rails.root.join('app/assets/fonts/NotoSansJP-VariableFont_wght.ttf').to_s
   TITLE_FONT_SIZE = 48
   TITLE_MAX_LENGTH = 40
-  INFO_FONT_SIZE = 28  # 著者・ステータス・理由で統一
+  INFO_FONT_SIZE = 28 # 著者・ステータス・理由で統一
   REASON_MAX_LENGTH = 80
 
   # 色設定
