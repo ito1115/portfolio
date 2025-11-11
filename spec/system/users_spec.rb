@@ -12,9 +12,8 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'Password confirmation', with: 'password123'
       click_button 'Sign up'
 
-      # ログイン後のページにリダイレクトされる(root_path)
-      expect(current_path).to eq root_path
-      expect(page).to have_content 'Welcome, test@example.com!'
+      # 登録後は読書記録一覧ページにリダイレクトされる
+      expect(current_path).to eq readings_path
     end
 
     it 'メールアドレスが空の場合、登録できないこと' do
@@ -64,9 +63,8 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'Password', with: 'password123'
       click_button 'Log in'
 
-      # ログイン後のページ要素が表示されるまで待機
-      expect(page).to have_content "Welcome, #{user.email}!", wait: 10
-      expect(current_path).to eq root_path
+      # ログイン後は読書記録一覧ページにリダイレクトされる
+      expect(current_path).to eq readings_path
     end
 
     it 'メールアドレスが間違っている場合、ログインできないこと' do

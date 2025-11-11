@@ -1,0 +1,131 @@
+<!-- ヒーローセクション -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-3 text-center mb-4 mb-md-0">
+        <%= image_tag "ogp.jpg", alt: "Tsundoku", class: "hero-image" %>
+      </div>
+      <div class="col-md-9 text-center text-md-start">
+        <h1 class="display-4 fw-bold mb-3">あなたが出会うべき本には、<br>もう出会っている</h1>
+        <p class="lead mb-4">忘れていた"運命の一冊"を再発見しよう</p>
+        <%= link_to "はじめる", user_signed_in? ? readings_path : new_user_registration_path, class: "btn btn-primary btn-lg" %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3つの特徴セクション -->
+<section class="features-section py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Tsundokuの3つの特徴</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="feature-card text-center p-4">
+          <h3 class="h5 mb-3">✨積読の罪悪感から解放</h3>
+          <p>「また買っちゃった...」から「また出会えた！」へ</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="feature-card text-center p-4">
+          <h3 class="h5 mb-3">🎯過去の自分が選んだ一冊と再会</h3>
+          <p>「おすすめの一冊」ページで忘れていた本を再発見</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="feature-card text-center p-4">
+          <h3 class="h5 mb-3">📖3つの読書状態で気楽に管理</h3>
+          <p>気になる・積読・積読卒業のシンプル管理</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 読書状態の説明セクション -->
+<section class="reading-status-section py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5">3つの読書状態</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <h3 class="h5 mb-3">📗気になる</h3>
+        <p>積読していないけど、いつか読みたい本</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h3 class="h5 mb-3">📚積読</h3>
+        <p>読んだことの有無に関わらず、積読している本</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h3 class="h5 mb-3">🎓積読卒業</h3>
+        <p>読み終えたかどうかとは関係なく、手放した本</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 使い方セクション -->
+<section class="how-to-section py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">使い方</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="step-card text-center p-4">
+          <div class="step-number mb-3">1</div>
+          <h3 class="h5 mb-3">気になる本を記録</h3>
+          <p>買った本や本棚の奥底に眠っていた本、読みたい本を登録</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="step-card text-center p-4">
+          <div class="step-number mb-3">2</div>
+          <h3 class="h5 mb-3">おすすめの一冊を見る</h3>
+          <p>あなたが過去に登録した本がランダムで登場</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="step-card text-center p-4">
+          <div class="step-number mb-3">3</div>
+          <h3 class="h5 mb-3">購入理由をふりかえる</h3>
+          <p>なぜこの本を選んだのか、過去の自分と対話することができます</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- こんな人におすすめセクション -->
+<section class="target-section py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5">こんな人におすすめ</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <ul class="checklist">
+          <li>✓ 何を積読しているか忘れるくらい積読している</li>
+          <li>✓ 同じ本を2回買ってしまったことがある</li>
+          <li>✓ 本屋で買ったのか、電子書籍で購入したか、分からなくなる</li>
+          <li>✓ 今読んでいる本が読み終わったら、買おうと思っていた本を忘れていく</li>
+          <li>✓ 気がついたら本屋に迷い込んでいる</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 世界観セクション -->
+<section class="philosophy-section py-5">
+  <div class="container">
+    <div class="philosophy-text text-center">
+      <p>本は、あなたの興味関心や悩み、個性を明確にすることを助けてくれる存在。</p>
+      <p>部屋の隅に積まれた本が、人生をより豊かにする気づきを与えてくれるかも。</p>
+      <p class="highlight mt-4">積読だって読書のひとつ。心置きなく積読を増やせる、充実の積読ライフを贈りたい。</p>
+      <p class="highlight">そんな気持ちで、このサービスを作りました。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTAセクション -->
+<section class="cta-section text-center py-5 bg-primary text-white">
+  <div class="container">
+    <h2 class="mb-4">忘れていた一冊と再会しよう</h2>
+    <%= link_to "はじめる", user_signed_in? ? readings_path : new_user_registration_path, class: "btn btn-light btn-lg" %>
+  </div>
+</section>
