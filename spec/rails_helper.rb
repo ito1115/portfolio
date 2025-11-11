@@ -53,7 +53,7 @@ RSpec.configure do |config|
 
   # Capybara設定
   # CI環境では処理が遅くなるため、待機時間を長めに設定
-  Capybara.default_max_wait_time = ENV['CI'] ? 15 : 5
+  Capybara.default_max_wait_time = ENV['CI'] ? 30 : 5
 
   # webdriver設定(capybara)
   config.before(:each, type: :system) do
@@ -63,12 +63,24 @@ RSpec.configure do |config|
         driver_options.add_argument('--no-sandbox')
         driver_options.add_argument('--disable-dev-shm-usage')
         driver_options.add_argument('--disable-gpu')
-        # JavaScriptのconfirmダイアログを有効化（デフォルトで動作するはず）
-        driver_options.add_argument('--enable-features=NetworkService,NetworkServiceInProcess')
+        # パフォーマンス最適化
+        driver_options.add_argument('--disable-extensions')
+        driver_options.add_argument('--disable-software-rasterizer')
+        driver_options.add_argument('--disable-background-networking')
+        driver_options.add_argument('--disable-default-apps')
+        driver_options.add_argument('--disable-sync')
+        driver_options.add_argument('--disable-translate')
+        driver_options.add_argument('--hide-scrollbars')
+        driver_options.add_argument('--metrics-recording-only')
+        driver_options.add_argument('--mute-audio')
+        driver_options.add_argument('--no-first-run')
+        driver_options.add_argument('--safebrowsing-disable-auto-update')
+        # メモリ使用量を削減
+        driver_options.add_argument('--js-flags=--max-old-space-size=512')
       end
       # CI環境ではSeleniumのタイムアウトも延長
-      Capybara.current_session.driver.browser.manage.timeouts.implicit_wait = 15
-      Capybara.current_session.driver.browser.manage.timeouts.page_load = 30
+      Capybara.current_session.driver.browser.manage.timeouts.implicit_wait = 30
+      Capybara.current_session.driver.browser.manage.timeouts.page_load = 60
     else
       # ローカル環境ではremote_chromeを使用
       driven_by :remote_chrome
