@@ -63,8 +63,20 @@ RSpec.configure do |config|
         driver_options.add_argument('--no-sandbox')
         driver_options.add_argument('--disable-dev-shm-usage')
         driver_options.add_argument('--disable-gpu')
-        # JavaScriptのconfirmダイアログを有効化（デフォルトで動作するはず）
-        driver_options.add_argument('--enable-features=NetworkService,NetworkServiceInProcess')
+        # パフォーマンス最適化
+        driver_options.add_argument('--disable-extensions')
+        driver_options.add_argument('--disable-software-rasterizer')
+        driver_options.add_argument('--disable-background-networking')
+        driver_options.add_argument('--disable-default-apps')
+        driver_options.add_argument('--disable-sync')
+        driver_options.add_argument('--disable-translate')
+        driver_options.add_argument('--hide-scrollbars')
+        driver_options.add_argument('--metrics-recording-only')
+        driver_options.add_argument('--mute-audio')
+        driver_options.add_argument('--no-first-run')
+        driver_options.add_argument('--safebrowsing-disable-auto-update')
+        # メモリ使用量を削減
+        driver_options.add_argument('--js-flags=--max-old-space-size=512')
       end
       # CI環境ではSeleniumのタイムアウトも延長
       Capybara.current_session.driver.browser.manage.timeouts.implicit_wait = 30
