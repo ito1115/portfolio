@@ -12,6 +12,9 @@ class Reading < ApplicationRecord
   }
 
   validates :status, presence: true
+  validate :wish_date_cannot_be_in_future
+  validate :tsundoku_date_cannot_be_in_future
+  validate :completed_date_cannot_be_in_future
 
   # 熟成度ランクを計算（積読状態の場合のみ）
   def aging_display
@@ -50,5 +53,31 @@ class Reading < ApplicationRecord
     return nil unless tsundoku? && tsundoku_date.present?
 
     (Date.current - tsundoku_date).to_i
+  end
+
+  private
+
+  def wish_date_cannot_be_in_future
+    return if wish_date.blank?
+
+    if wish_date > Date.current
+      errors.add(:wish_date, "は未来の日付を指定できません")
+    end
+  end
+
+  def tsundoku_date_cannot_be_in_future
+    return if tsundoku_date.blank?
+
+    if tsundoku_date > Date.current
+      errors.add(:tsundoku_date, "は未来の日付を指定できません")
+    end
+  end
+
+  def completed_date_cannot_be_in_future
+    return if completed_date.blank?
+
+    if completed_date > Date.current
+      errors.add(:completed_date, "は未来の日付を指定できません")
+    end
   end
 end

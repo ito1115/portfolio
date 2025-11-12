@@ -7,6 +7,7 @@ default_media = [
   { name: 'kindle', category: 'digital' },
   { name: 'rakuten_kobo', category: 'digital' },
   { name: 'doly', category: 'digital' },
+  { name: 'pdf', category: 'digital' },
   { name: 'other', category: 'other' }
 ]
 
