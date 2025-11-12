@@ -104,7 +104,7 @@
             </div>
             <div class="book-actions">
               <%= link_to "編集", edit_reading_path(reading), class: "btn btn-sm btn-secondary" %>
-              <%= link_to "削除", reading_path(reading), class: "btn btn-sm btn-danger" %>
+              <%= button_to "削除", reading, method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "btn btn-sm btn-danger" %>
             </div>
           </div>
         </div>
