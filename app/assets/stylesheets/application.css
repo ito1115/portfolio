@@ -12,5 +12,6 @@
  *
  *= require readings
  *= require pages
+ *= require devise
  *= require_self
  */
