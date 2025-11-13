@@ -4,6 +4,13 @@
       <h1>TSUNDOKU</h1>
     </div>
 
+    <% if notice.present? %>
+      <div class="auth-notice"><%= notice %></div>
+    <% end %>
+    <% if alert.present? %>
+      <div class="auth-alert"><%= alert %></div>
+    <% end %>
+
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 

@@ -221,3 +221,24 @@
     font-size: 15px;
   }
 }
+
+/* 全体レイアウト用フラッシュメッセージ */
+.flash-notice {
+  background: #E8F5E9;
+  border-left: 4px solid #4CAF50;
+  padding: 16px 20px;
+  margin: 0;
+  font-size: 15px;
+  color: #2E7D32;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.flash-alert {
+  background: #FFF3F3;
+  border-left: 4px solid #DC3545;
+  padding: 16px 20px;
+  margin: 0;
+  font-size: 15px;
+  color: #DC3545;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
