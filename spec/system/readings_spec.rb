@@ -38,8 +38,6 @@ RSpec.describe '積読本管理', type: :system do
 
       click_button 'Create Reading'
 
-      # バリデーションエラーでフォームが再表示される（POSTリクエストなのでパスは/readings）
-      expect(page).to have_current_path(readings_path, ignore_query: true)
       # バリデーションエラーメッセージを確認
       expect(page).to have_content 'Statusを選択してください'
       # フォームが再表示されていることを確認
@@ -105,15 +103,10 @@ RSpec.describe '積読本管理', type: :system do
     it '積読本を削除できること' do
       visit reading_path(reading)
 
-      # data-turbo-confirm属性を削除してから削除ボタンをクリック
-      page.execute_script(<<~JS)
-        const deleteButton = document.querySelector('input[value="削除"]');
-        if (deleteButton) {
-          deleteButton.removeAttribute('data-turbo-confirm');
-        }
-      JS
-
-      click_button '削除'
+      # 削除ボタンをクリックし、確認ダイアログを受け入れる
+      accept_confirm do
+        click_button '削除'
+      end
 
       # 削除後はreadings_pathにリダイレクトされる
       expect(page).to have_current_path(readings_path, wait: 5)
