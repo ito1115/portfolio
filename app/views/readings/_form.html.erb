@@ -55,6 +55,11 @@
                     ], reading.status),
                     { prompt: "状態を選択してください" },
                     { class: "form-control", required: true } %>
+    <small class="form-text">
+      気になる：いつか読みたい本<br>
+      積読：読んだことの有無に関わらず積読している本<br>
+      積読卒業：読み終えたかに関係なく手放した本<br>
+    </small>
   </div>
 
   <div class="form-group">
@@ -113,20 +118,23 @@
 
   <div class="form-row">
     <div class="form-group half">
-      <%= form.label :wish_date, "読みたいと思った日", class: "form-label" %>
-      <%= form.date_field :wish_date, class: "form-control" %>
+      <%= form.label :wish_date, "気になると思った日", class: "form-label" %>
+      <%= form.date_field :wish_date, class: "form-control", max: Date.current %>
     </div>
 
     <div class="form-group half">
       <%= form.label :tsundoku_date, "積読開始日", class: "form-label" %>
-      <%= form.date_field :tsundoku_date, class: "form-control" %>
-      <small class="form-text">🍷 積読開始日を登録すると、経過期間に応じた熟成度バッジが表示されます</small>
+      <%= form.date_field :tsundoku_date, class: "form-control", max: Date.current %>
+      <small class="form-text">
+        本を購入した日を記録しましょう！<br>
+        積読開始日を登録すると、経過期間に応じた熟成度バッジ🍷が表示されます
+      </small>
     </div>
-  </div>
 
-  <div class="form-group">
-    <%= form.label :completed_date, "読了日", class: "form-label" %>
-    <%= form.date_field :completed_date, class: "form-control" %>
+    <div class="form-group half">
+      <%= form.label :completed_date, "積読卒業日", class: "form-label" %>
+      <%= form.date_field :completed_date, class: "form-control", max: Date.current %>
+    </div>
   </div>
 
   <div class="form-actions">

@@ -104,7 +104,7 @@
             </div>
             <div class="book-actions">
               <%= link_to "編集", edit_reading_path(reading), class: "btn btn-sm btn-secondary" %>
-              <%= link_to "削除", reading_path(reading), class: "btn btn-sm btn-danger" %>
+              <%= button_to "削除", reading, method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "btn btn-sm btn-danger" %>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@
   <% else %>
     <div class="no-books">
       <p>まだ読書記録がありません。</p>
-      <%= link_to "最初の記録を作成", new_reading_path, class: "btn btn-primary" %>
+      <%= link_to "最初の記録を作成", search_books_path, class: "btn btn-primary" %>
     </div>
   <% end %>
 </div>

@@ -70,7 +70,7 @@
 
         <% if @reading.wish_date.present? %>
           <div class="info-row">
-            <label>読みたいと思った日：</label>
+            <label>気になると思った日：</label>
             <span><%= @reading.wish_date.strftime("%Y年%m月%d日") %></span>
           </div>
         <% end %>
@@ -89,7 +89,7 @@
 
         <% if @reading.completed_date.present? %>
           <div class="info-row">
-            <label>読了日：</label>
+            <label>積読卒業日：</label>
             <span><%= @reading.completed_date.strftime("%Y年%m月%d日") %></span>
           </div>
         <% end %>
@@ -114,7 +114,7 @@
       <div class="book-actions" style="margin-top: 30px;">
         <%= link_to "編集", edit_reading_path(@reading), class: "btn btn-primary" %>
         <%= button_to "削除", @reading, method: :delete,
-                      data: { turbo_confirm: "本当に削除しますか？" },
+                      data: { turbo_confirm: "削除しますか？" },
                       class: "btn btn-danger" %>
       </div>
     </div>

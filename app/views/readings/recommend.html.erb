@@ -62,7 +62,7 @@
 
           <% if @reading.wish_date.present? %>
             <div class="info-row">
-              <label>読みたいと思った日：</label>
+              <label>気になると思った日：</label>
               <span><%= @reading.wish_date.strftime("%Y年%m月%d日") %></span>
             </div>
           <% end %>
@@ -76,7 +76,7 @@
 
           <% if @reading.completed_date.present? %>
             <div class="info-row">
-              <label>読了日：</label>
+              <label>積読卒業日：</label>
               <span><%= @reading.completed_date.strftime("%Y年%m月%d日") %></span>
             </div>
           <% end %>
@@ -119,7 +119,7 @@
         まだ読書記録が登録されていません。<br>
         積読本を登録しましょう！
       </p>
-      <%= link_to "読書記録を新規作成", new_reading_path, class: "btn btn-primary" %>
+      <%= link_to "読書記録を新規作成", search_books_path, class: "btn btn-primary" %>
     </div>
   </div>
 <% end %>
