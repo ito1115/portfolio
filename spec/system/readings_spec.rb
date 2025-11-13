@@ -39,7 +39,7 @@ RSpec.describe '積読本管理', type: :system do
       click_button 'Create Reading'
 
       # バリデーションエラーメッセージを確認
-      expect(page).to have_content 'Statusを選択してください'
+      expect(page).to have_content 'Status を選択してください'
       # フォームが再表示されていることを確認
       expect(page).to have_button 'Create Reading'
     end
