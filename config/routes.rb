@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # OGP画像生成
+  resources :ogp_images, only: [:show]
+
   resources :books, only: %i[new create] do
     collection do
       get :search

@@ -8,7 +8,23 @@ class ReadingsController < ApplicationController
     @readings = current_user.readings.includes(:book, :purchase_medium).order(created_at: :desc)
   end
 
-  def show; end
+  def show
+    # 動的OGPメタタグを設定
+    set_meta_tags(
+      title: "#{@reading.book.title}を追加しました",
+      description: "#{@reading.book.title}の読書記録。#{status_text(@reading.status)}",
+      og: {
+        title: @reading.book.title,
+        description: "#{@reading.book.author || '著者不明'} | #{status_text(@reading.status)}",
+        image: ogp_image_url(@reading),
+        type: 'article'
+      },
+      twitter: {
+        card: 'summary_large_image',
+        image: ogp_image_url(@reading)
+      }
+    )
+  end
 
   def new
     @reading = current_user.readings.build
@@ -86,5 +102,22 @@ class ReadingsController < ApplicationController
   def reading_params
     params.expect(reading: %i[book_id reason status tsundoku_date
                               wish_date completed_date purchase_medium_id])
+  end
+
+  def status_text(status)
+    case status
+    when 'wish'
+      '気になる'
+    when 'tsundoku'
+      '積読'
+    when 'completed'
+      '読了'
+    else
+      '不明'
+    end
+  end
+
+  def ogp_image_url(reading)
+    url_for(controller: 'ogp_images', action: 'show', id: reading.id, only_path: false)
   end
 end

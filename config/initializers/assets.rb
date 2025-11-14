@@ -15,3 +15,8 @@ Rails.application.config.assets.version = '1.0'
 
 # OGP画像をプリコンパイル対象に追加
 Rails.application.config.assets.precompile += %w[ogp.jpg]
+Rails.application.config.assets.precompile += %w[ogp/ogp_background.jpg]
+
+# フォントファイルをプリコンパイル対象に追加
+Rails.application.config.assets.paths << Rails.root.join('app/assets/fonts')
+Rails.application.config.assets.precompile += %w[NotoSansJP-VariableFont_wght.ttf]

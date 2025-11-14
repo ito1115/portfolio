@@ -53,8 +53,9 @@ gem 'devise'
 gem 'dotenv-rails'
 gem 'ruby-openai'
 
-# 静的OGP
+# OGP
 gem 'meta-tags'
+gem 'mini_magick'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
