@@ -1,7 +1,16 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
+  # Preview emails in development
+  mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
+
+  devise_for :users, controllers: {
+    registrations: 'users/registrations'
+  }
+
+  # ユーザー関連ページ
+  get 'users/registration_complete', to: 'users#registration_complete', as: :users_registration_complete
+  get 'profile', to: 'users#profile', as: :profile
 
   resources :readings do
     collection do

@@ -1,0 +1,55 @@
+<div class="devise-container">
+  <div class="devise-card">
+    <h2 class="devise-title">プロフィール</h2>
+
+    <div class="profile-info">
+      <div class="info-item">
+        <label class="info-label">メールアドレス</label>
+        <p class="info-value"><%= @user.email %></p>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <%= link_to "登録情報を編集", edit_user_registration_path, class: "btn btn-primary" %>
+      <%= link_to "My Booksに戻る", readings_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+</div>
+
+<style>
+.profile-info {
+  margin: 30px 0;
+}
+
+.info-item {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.info-label {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 16px;
+  color: #333;
+  margin: 0;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.profile-actions .btn {
+  flex: 1;
+  min-width: 150px;
+}
+</style>

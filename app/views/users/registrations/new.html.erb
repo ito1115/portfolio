@@ -1,0 +1,44 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <h1>TSUNDOKU</h1>
+    </div>
+
+    <% if notice.present? %>
+      <div class="auth-notice"><%= notice %></div>
+    <% end %>
+    <% if alert.present? %>
+      <div class="auth-alert"><%= alert %></div>
+    <% end %>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+
+      <div class="auth-form-group">
+        <%= f.label :email, "メールアドレス", class: "auth-form-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-form-input", placeholder: "example@email.com" %>
+      </div>
+
+      <div class="auth-form-group">
+        <%= f.label :password, "パスワード", class: "auth-form-label" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "auth-form-input", placeholder: "6文字以上" %>
+        <% if @minimum_password_length %>
+          <p class="auth-hint"><%= @minimum_password_length %>文字以上で入力してください</p>
+        <% end %>
+      </div>
+
+      <div class="auth-form-group">
+        <%= f.label :password_confirmation, "パスワード確認", class: "auth-form-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-form-input", placeholder: "パスワードを再入力" %>
+      </div>
+
+      <div>
+        <%= f.submit "新規登録", class: "auth-submit-btn" %>
+      </div>
+    <% end %>
+
+    <div class="auth-links">
+      <%= link_to "ログインはこちら", new_session_path(resource_name), class: "auth-link" %>
+    </div>
+  </div>
+</div>
