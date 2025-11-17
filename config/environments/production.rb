@@ -53,12 +53,6 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
-  # セッションcookie設定（HTTPS環境用）
-  config.session_store :cookie_store,
-                       key: '_graduation_app_session',
-                       secure: true,
-                       same_site: :lax
-
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new($stdout)
                                        .tap  { |logger| logger.formatter = Logger::Formatter.new }
