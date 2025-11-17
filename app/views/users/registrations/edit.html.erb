@@ -1,0 +1,123 @@
+<div class="devise-container">
+  <div class="devise-card">
+    <h2 class="devise-title">登録情報の編集</h2>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+
+      <div class="form-group">
+        <%= f.label :email, "メールアドレス", class: "form-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-input" %>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div class="confirmation-notice">
+          確認待ちのメールアドレス: <%= resource.unconfirmed_email %>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :current_password, "現在のパスワード", class: "form-label" %>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-input", placeholder: "セキュリティ確認のため入力してください" %>
+        <p class="form-hint required-field">※ 必須項目（メールアドレスもしくはパスワードの変更の際には必ず入力してください）</p>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "新しいパスワード", class: "form-label" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "form-input", placeholder: "変更しない場合は空欄のまま" %>
+        <% if @minimum_password_length %>
+          <p class="form-hint"><%= @minimum_password_length %>文字以上で入力してください</p>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "form-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-input", placeholder: "パスワードを再入力" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "更新する", class: "btn btn-primary" %>
+        <%= link_to "キャンセル", profile_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.form-hint.required-field {
+  color: #e74c3c;
+}
+
+.confirmation-notice {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #856404;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.form-actions .btn {
+  flex: 1;
+}
+
+.additional-links {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.link-text {
+  color: #4a90e2;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.link-text:hover {
+  color: #357abd;
+  text-decoration: underline;
+}
+</style>

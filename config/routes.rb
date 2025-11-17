@@ -8,8 +8,9 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
-  # ユーザー登録完了ページ
+  # ユーザー関連ページ
   get 'users/registration_complete', to: 'users#registration_complete', as: :users_registration_complete
+  get 'profile', to: 'users#profile', as: :profile
 
   resources :readings do
     collection do

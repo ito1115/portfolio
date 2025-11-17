@@ -59,4 +59,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def after_inactive_sign_up_path_for(_resource)
     users_registration_complete_path
   end
+
+  # The path used after updating account information.
+  def after_update_path_for(resource)
+    profile_path
+  end
 end
