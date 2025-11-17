@@ -17,6 +17,12 @@ export default class extends Controller {
 
   // バーコードスキャンを開始
   async startScan() {
+    // Quaggaが利用できない場合（テスト環境など）はスキャンを開始しない
+    if (!Quagga) {
+      console.warn("Quagga is not available. Barcode scanner is disabled.")
+      return
+    }
+
     this.modalTarget.classList.add("active")
     this.statusTarget.textContent = "カメラを起動中..."
 
@@ -146,7 +152,7 @@ export default class extends Controller {
 
   // スキャナーを停止
   stopScanner() {
-    if (this.isScanning) {
+    if (this.isScanning && Quagga) {
       Quagga.stop()
       this.isScanning = false
     }
