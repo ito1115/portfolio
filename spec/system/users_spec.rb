@@ -12,8 +12,8 @@ RSpec.describe 'ユーザー認証', type: :system do
       fill_in 'パスワード確認', with: 'password123'
       click_button '新規登録'
 
-      # 登録後は読書記録一覧ページにリダイレクトされる
-      expect(current_path).to eq readings_path
+      # confirmableが有効なため、登録後は確認メール送信完了ページにリダイレクトされる
+      expect(current_path).to eq users_registration_complete_path
     end
 
     it 'メールアドレスが空の場合、登録できないこと' do
@@ -87,23 +87,6 @@ RSpec.describe 'ユーザー認証', type: :system do
 
       # ログインページに留まる
       expect(current_path).to eq new_user_session_path
-    end
-  end
-
-  describe 'ログアウト' do
-    let(:user) { create(:user) }
-
-    before do
-      login_as user, scope: :user
-    end
-
-    xit 'ログアウトができること' do
-      # TODO: ログアウト機能が実装されたら有効化する
-      visit root_path
-      click_link 'Log out'
-
-      expect(page).to have_content 'ログアウトしました。'
-      expect(current_path).to eq root_path
     end
   end
 end
