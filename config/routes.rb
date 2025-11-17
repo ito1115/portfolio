@@ -4,7 +4,12 @@ Rails.application.routes.draw do
   # Preview emails in development
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: 'users/registrations'
+  }
+
+  # ユーザー登録完了ページ
+  get 'users/registration_complete', to: 'users#registration_complete', as: :users_registration_complete
 
   resources :readings do
     collection do
