@@ -64,7 +64,7 @@ RSpec.describe 'ユーザー認証', type: :system do
       click_button 'ログイン'
 
       # ログイン後は読書記録一覧ページにリダイレクトされる
-      expect(current_path).to eq readings_path
+      expect(page).to have_current_path readings_path, ignore_query: true
     end
 
     it 'メールアドレスが間違っている場合、ログインできないこと' do
