@@ -40,6 +40,21 @@
         <%= link_to "キャンセル", profile_path, class: "btn btn-secondary" %>
       </div>
     <% end %>
+
+    <div class="account-deletion-section">
+      <h3 class="deletion-title">アカウントの削除</h3>
+      <p class="deletion-warning">
+        アカウントを削除すると、すべての読書記録が完全に削除されます。<br>
+        この操作は取り消せません。
+      </p>
+      <%= button_to "アカウントを削除する",
+                    registration_path(resource_name),
+                    data: {
+                      turbo_confirm: "本当にアカウントを削除しますか？\n\nすべての読書記録が完全に削除されます。\nこの操作は取り消せません。"
+                    },
+                    method: :delete,
+                    class: "btn btn-danger" %>
+    </div>
   </div>
 </div>
 
@@ -119,5 +134,45 @@
 .link-text:hover {
   color: #357abd;
   text-decoration: underline;
+}
+
+.account-deletion-section {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.deletion-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e74c3c;
+  margin-bottom: 15px;
+}
+
+.deletion-warning {
+  background-color: #fff5f5;
+  border: 1px solid #feb2b2;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #c53030;
+  line-height: 1.6;
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
 }
 </style>
