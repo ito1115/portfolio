@@ -10,12 +10,15 @@ services:
 
   web:
     build: .
-    command: bash -c "sleep 10 && rm -f /rails/tmp/pids/server.pid && bundle exec rails db:create && bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0"
+    user: root  # 開発環境のみ
+    command: bash -c "sleep 10 && bundle install && rm -f /rails/tmp/pids/server.pid && bundle exec rails db:create && bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0"
     env_file:
       - .env
     environment:
       - RAILS_ENV=development
       - SELENIUM_DRIVER_URL=http://chrome:4444/wd/hub
+      - BUNDLE_DEPLOYMENT=0
+      - BUNDLE_WITHOUT=
     volumes:
       - .:/rails
       - bundle_cache:/usr/local/bundle
