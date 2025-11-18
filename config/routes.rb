@@ -42,4 +42,7 @@ Rails.application.routes.draw do
 
   # 利用規約
   get "/footers/terms", to: "footers#terms"
+
+  # プライバシーポリシー
+  get "/footers/privacy", to: "footers#privacy"
 end
