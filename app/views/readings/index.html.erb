@@ -1,27 +1,4 @@
 <div class="container">
-  <!-- ヘッダー -->
-  <div class="header">
-    <h1>TSUNDOKU</h1>
-    <div class="header-right">
-      <div class="user-info">
-        <p>Welcome, <%= current_user.email %>!</p>
-      </div>
-      <div class="header-nav">
-        <%= link_to "おすすめの一冊を見る", recommend_readings_path, class: "nav-link" %>
-        <%= link_to "本を検索", search_books_path, class: "nav-link" %>
-        <div class="profile-dropdown">
-          <button class="nav-link profile-button" id="profileDropdownButton">
-            プロフィール ▼
-          </button>
-          <div class="dropdown-menu" id="profileDropdownMenu">
-            <%= link_to "プロフィール", profile_path, class: "dropdown-item" %>
-            <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item logout-button", data: { turbo: false } %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- 検索フォーム -->
   <div class="search-section">
     <div class="search-box">
@@ -128,7 +105,7 @@
 
 <script>
 // My Books検索機能
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbo:load', function() {
   const searchInput = document.getElementById('myBooksSearchInput');
   const clearButton = document.getElementById('clearSearch');
   const readingItems = document.querySelectorAll('.reading-item');
@@ -194,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // タブフィルタリング機能
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbo:load', function() {
   const tabButtons = document.querySelectorAll('#readingStatusTabs [data-status]');
   const readingItems = document.querySelectorAll('.reading-item[data-status]');
 
@@ -224,94 +201,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
-
-// プロフィールドロップダウン機能
-document.addEventListener('DOMContentLoaded', function() {
-  const dropdownButton = document.getElementById('profileDropdownButton');
-  const dropdownMenu = document.getElementById('profileDropdownMenu');
-
-  if (dropdownButton && dropdownMenu) {
-    // ボタンクリックでメニューを開閉
-    dropdownButton.addEventListener('click', function(e) {
-      e.stopPropagation();
-      dropdownMenu.classList.toggle('show');
-    });
-
-    // ドキュメント全体のクリックでメニューを閉じる
-    document.addEventListener('click', function(e) {
-      if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
-        dropdownMenu.classList.remove('show');
-      }
-    });
-
-    // ESCキーでメニューを閉じる
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        dropdownMenu.classList.remove('show');
-      }
-    });
-  }
-});
 </script>
-
-<style>
-/* プロフィールドロップダウンのスタイル */
-.profile-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.profile-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-family: inherit;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  min-width: 180px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  margin-top: 8px;
-  z-index: 1000;
-  overflow: hidden;
-}
-
-.dropdown-menu.show {
-  display: block;
-}
-
-.dropdown-item {
-  display: block;
-  width: 100%;
-  padding: 12px 16px;
-  text-decoration: none;
-  color: #333;
-  background: none;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-size: 14px;
-  font-family: inherit;
-}
-
-.dropdown-item:hover {
-  background-color: #f5f5f5;
-}
-
-.logout-button {
-  border-top: 1px solid #e0e0e0;
-  color: #e74c3c;
-}
-
-.logout-button:hover {
-  background-color: #ffebee;
-}
-</style>
