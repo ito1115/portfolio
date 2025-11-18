@@ -4,6 +4,13 @@ require 'uri'
 class FootersController < ApplicationController
   def contact_form
   end
+
+  def terms
+  end
+
+  def privacy
+  end
+
   def create
     uri = URI.parse("https://docs.google.com/forms/u/0/d/e/1FAIpQLScSJCWslQjiuAfO-rmsmlk6v2LW-rfHwXV5nFT6HUdoN1jTcQ/formResponse")
 
