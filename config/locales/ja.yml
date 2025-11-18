@@ -50,3 +50,6 @@ ja:
         failure: "読書状態の変更に失敗しました。"
       destroy:
         success: "削除しました"
+    footers:
+      contact_form:
+        success: "お問い合わせいただきありがとうございます"

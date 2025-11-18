@@ -37,12 +37,12 @@ Rails.application.routes.draw do
   root 'pages#home'
 
   # お問い合わせ
-  get "/footers/contact_form", to: "footers#contact_form"
-  post "/footers/contact_form", to: "footers#create"
+  get '/footers/contact_form', to: 'footers#contact_form'
+  post '/footers/contact_form', to: 'footers#create'
 
   # 利用規約
-  get "/footers/terms", to: "footers#terms"
+  get '/footers/terms', to: 'footers#terms'
 
   # プライバシーポリシー
-  get "/footers/privacy", to: "footers#privacy"
+  get '/footers/privacy', to: 'footers#privacy'
 end
