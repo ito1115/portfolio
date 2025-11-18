@@ -33,6 +33,16 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get 'up' => 'rails/health#show', as: :rails_health_check
 
-  # Defines the root path route ("/")
+  # TOPページ
   root 'pages#home'
+
+  # お問い合わせ
+  get '/footers/contact_form', to: 'footers#contact_form'
+  post '/footers/contact_form', to: 'footers#create'
+
+  # 利用規約
+  get '/footers/terms', to: 'footers#terms'
+
+  # プライバシーポリシー
+  get '/footers/privacy', to: 'footers#privacy'
 end
