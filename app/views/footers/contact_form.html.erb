@@ -1,38 +1,73 @@
-<div class="relative top-24 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    <h2 class="mt-10 text-center text-2xl/9 font-bold">お問い合わせ</h2>
-  </div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- ページヘッダー -->
+      <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold mb-3">お問い合わせ</h1>
+        <p class="text-muted">ご質問やご要望がございましたら、お気軽にお問い合わせください。</p>
+      </div>
 
-  <%= form_with url: "/footers/contact_form", method: :post, local: true, data: { turbo: false } do |f| %>
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <!-- お名前 -->
-      <div>
-        <%= f.label :name, "お名前", class: "block text-sm/6 font-medium" %>
-        <div class="mt-2">
-          <%= text_field_tag :name, nil, required: true, placeholder: "積読たろう", class: "block w-full rounded-md bg-primary px-3 py-1.5 text-base outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm" %>
+      <!-- お問い合わせフォーム -->
+      <%= form_with url: "/footers/contact_form", method: :post, local: true, data: { turbo: false } do |f| %>
+        <!-- お名前 -->
+        <div class="mb-4">
+          <%= f.label :name, "お名前", class: "form-label fw-semibold" %>
+          <%= text_field_tag :name, nil,
+              required: true,
+              placeholder: "山田太郎",
+              class: "form-control" %>
         </div>
-      </div>
 
-      <!-- メールアドレス -->
-      <div class="mt-4">
-        <%= f.label :email, "メールアドレス", class: "block text-sm/6 font-medium" %>
-        <div class="mt-2">
-          <%= email_field_tag :email, nil, required: true, placeholder: "mail@example.com", class: "block w-full rounded-md bg-primary px-3 py-1.5 text-base outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm" %>
+        <!-- メールアドレス -->
+        <div class="mb-4">
+          <%= f.label :email, "メールアドレス", class: "form-label fw-semibold" %>
+          <%= email_field_tag :email, nil,
+              required: true,
+              placeholder: "example@mail.com",
+              class: "form-control" %>
+          <small class="form-text text-muted">返信先のメールアドレスをご入力ください。</small>
         </div>
-      </div>
 
-      <!-- お問い合わせ内容 -->
-      <div class="mt-4">
-        <%= f.label :content, "お問い合わせ内容", class: "block text-sm/6 font-medium" %>
-        <div class="mt-2">
-          <%= text_area_tag :content, nil, required: true, rows: 4, placeholder: "ご質問やご要望などをご記入ください", class: "block w-full rounded-md bg-primary px-3 py-1.5 text-base outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm" %>
+        <!-- お問い合わせ内容 -->
+        <div class="mb-4">
+          <%= f.label :content, "お問い合わせ内容", class: "form-label fw-semibold" %>
+          <%= text_area_tag :content, nil,
+              required: true,
+              rows: 6,
+              placeholder: "ご質問やご要望などをご記入ください",
+              class: "form-control" %>
         </div>
-      </div>
 
-      <!-- 送信ボタン -->
-      <div class="mt-8">
-        <%= f.submit "送信", class: "actions  flex w-full justify-center rounded-md bg-accent px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"%>
-      </div>
+        <!-- ボタン -->
+        <div class="d-flex flex-column flex-md-row gap-3 mt-4">
+          <%= link_to "← ホームに戻る", root_path, class: "btn btn-outline-secondary btn-lg order-md-1" %>
+          <%= f.submit "送信する", class: "btn btn-primary btn-lg order-md-2" %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </div>
 </div>
+
+<style>
+.form-label {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+.form-control::placeholder {
+  color: #999;
+}
+
+.btn-primary {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 6px;
+}
+</style>
