@@ -6,6 +6,6 @@ class DeviseMailer < ApplicationMailer
   # 既に登録済みのメールアドレスで登録を試みた場合の通知
   def already_registered(email)
     @email = email
-    mail(to: email, subject: '【TSUNDOKU】アカウント登録の試みについて')
+    mail(to: email, subject: t('mailer.devise_mailer.already_registered.subject'))
   end
 end

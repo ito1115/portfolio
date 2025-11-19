@@ -50,6 +50,14 @@ ja:
         failure: "読書状態の変更に失敗しました。"
       destroy:
         success: "削除しました"
+    google_login_api:
+      success: "ログインしました"
+      invalid_access: "不正なアクセスです"
     footers:
       contact_form:
         success: "お問い合わせいただきありがとうございます"
+
+  mailer:
+    devise_mailer:
+      already_registered:
+        subject: "【TSUNDOKU】アカウント登録の試みについて"
