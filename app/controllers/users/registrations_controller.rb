@@ -11,9 +11,26 @@ module Users
     # end
 
     # POST /resource
-    # def create
-    #   super
-    # end
+    def create
+      Rails.logger.info "=== RegistrationsController#create called ==="
+      Rails.logger.info "Email: #{sign_up_params[:email]}"
+
+      # メールアドレスが既に登録済みかチェック（User Enumeration対策）
+      existing_user = User.find_by(email: sign_up_params[:email])
+
+      if existing_user
+        Rails.logger.info "=== Existing user found, sending email ==="
+        # 既存ユーザーに通知メールを送信
+        DeviseMailer.already_registered(existing_user.email).deliver_now
+        Rails.logger.info "=== Email sent ==="
+        # 成功画面に遷移（攻撃者が判別できないようにする）
+        redirect_to users_registration_complete_path
+      else
+        Rails.logger.info "=== New user, calling super ==="
+        # 通常の登録処理
+        super
+      end
+    end
 
     # GET /resource/edit
     # def edit
