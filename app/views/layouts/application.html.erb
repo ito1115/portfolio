@@ -9,8 +9,8 @@
     <!-- Google Analytics (本番環境のみ) -->
     <% if Rails.env.production? %>
       <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-BCRFYHPVLH"></script>
-      <script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-BCRFYHPVLH" nonce="<%= content_security_policy_nonce %>"></script>
+      <script nonce="<%= content_security_policy_nonce %>">
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());

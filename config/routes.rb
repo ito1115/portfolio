@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'google_login_api/callback'
   # Preview emails in development
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
@@ -45,4 +46,7 @@ Rails.application.routes.draw do
 
   # プライバシーポリシー
   get '/footers/privacy', to: 'footers#privacy'
+
+  # Googleログイン
+  post '/google_login_api/callback', to: 'google_login_api#callback'
 end

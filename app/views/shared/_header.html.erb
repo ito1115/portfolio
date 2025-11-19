@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <script>
+  <script nonce="<%= content_security_policy_nonce %>">
   // プロフィールドロップダウン機能
   document.addEventListener('turbo:load', function() {
     const dropdownButton = document.getElementById('profileDropdownButton');
