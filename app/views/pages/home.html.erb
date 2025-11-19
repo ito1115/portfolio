@@ -8,7 +8,8 @@
       <div class="col-md-9 text-center text-md-start">
         <h1 class="display-4 fw-bold mb-3">あなたが出会うべき本には、<br>もう出会っている</h1>
         <p class="lead mb-4">忘れていた"運命の一冊"を再発見しよう</p>
-        <%= link_to "はじめる", user_signed_in? ? readings_path : new_user_registration_path, class: "btn btn-primary btn-lg" %>
+        <%= link_to "はじめる", user_signed_in? ? readings_path : new_user_registration_path, class: "btn btn-success btn-lg me-2" %>
+        <%= link_to "ログイン", user_signed_in? ? readings_path : new_user_session_url, class: "btn btn-primary btn-lg" %>
       </div>
     </div>
   </div>
@@ -62,27 +63,61 @@
   </div>
 </section>
 
+<!-- 熟成度機能セクション -->
+<section class="maturity-section py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">積読の熟成度</h2>
+    <p class="text-center text-muted mb-4">積読している本は、時間が経つほど"熟成"していきます</p>
+    <div class="row">
+      <div class="col-md-4 col-sm-6 mb-3">
+        <h3 class="h6 mb-2">🌱 新鮮</h3>
+        <p class="small text-muted mb-0 ms-4">0-6日</p>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-3">
+        <h3 class="h6 mb-2">🌿 熟成中</h3>
+        <p class="small text-muted mb-0 ms-4">7-89日</p>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-3">
+        <h3 class="h6 mb-2">🍃 熟成</h3>
+        <p class="small text-muted mb-0 ms-4">90-364日</p>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-3">
+        <h3 class="h6 mb-2">🍷 ヴィンテージ</h3>
+        <p class="small text-muted mb-0 ms-4">1-3年</p>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-3">
+        <h3 class="h6 mb-2">💎 プレミアム</h3>
+        <p class="small text-muted mb-0 ms-4">3-5年</p>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-3">
+        <h3 class="h6 mb-2">👑 伝説</h3>
+        <p class="small text-muted mb-0 ms-4">5年以上</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 使い方セクション -->
-<section class="how-to-section py-5">
+<section class="how-to-section py-5 bg-light">
   <div class="container">
     <h2 class="text-center mb-5">使い方</h2>
     <div class="row">
       <div class="col-md-4 mb-4">
-        <div class="step-card text-center p-4">
+        <div class="step-card text-center p-4 bg-white">
           <div class="step-number mb-3">1</div>
           <h3 class="h5 mb-3">気になる本を記録</h3>
           <p>買った本や本棚の奥底に眠っていた本、読みたい本を登録</p>
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <div class="step-card text-center p-4">
+        <div class="step-card text-center p-4 bg-white">
           <div class="step-number mb-3">2</div>
           <h3 class="h5 mb-3">おすすめの一冊を見る</h3>
           <p>あなたが過去に登録した本がランダムで登場</p>
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <div class="step-card text-center p-4">
+        <div class="step-card text-center p-4 bg-white">
           <div class="step-number mb-3">3</div>
           <h3 class="h5 mb-3">購入理由をふりかえる</h3>
           <p>なぜこの本を選んだのか、過去の自分と対話することができます</p>
@@ -93,7 +128,7 @@
 </section>
 
 <!-- こんな人におすすめセクション -->
-<section class="target-section py-5 bg-light">
+<section class="target-section py-5 bg-white">
   <div class="container">
     <h2 class="text-center mb-5">こんな人におすすめ</h2>
     <div class="row justify-content-center">
@@ -111,7 +146,7 @@
 </section>
 
 <!-- 世界観セクション -->
-<section class="philosophy-section py-5">
+<section class="philosophy-section py-5 bg-light">
   <div class="container">
     <div class="philosophy-text text-center">
       <p>本は、あなたの興味関心や悩み、個性を明確にすることを助けてくれる存在。</p>
@@ -123,9 +158,10 @@
 </section>
 
 <!-- CTAセクション -->
-<section class="cta-section text-center py-5 bg-primary text-white">
+<section class="cta-section text-center py-5">
   <div class="container">
     <h2 class="mb-4">忘れていた一冊と再会しよう</h2>
-    <%= link_to "はじめる", user_signed_in? ? readings_path : new_user_registration_path, class: "btn btn-light btn-lg" %>
+    <%= link_to "はじめる", user_signed_in? ? readings_path : new_user_registration_path, class: "btn btn-success btn-lg me-2" %>
+    <%= link_to "ログイン", user_signed_in? ? readings_path : new_user_session_url, class: "btn btn-primary btn-lg" %>
   </div>
 </section>
