@@ -126,7 +126,9 @@ class GoogleBooksService
 
     data = JSON.parse(response.body)
     results = parse_books(data)
-    total_items = data['totalItems'] || 0
+    # Google Books APIはstartIndex 1000以降のデータを返せないため上限を設定
+    raw_total = data['totalItems'] || 0
+    total_items = [raw_total, 1000].min
 
     {
       results: results,
