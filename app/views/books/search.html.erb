@@ -101,15 +101,19 @@
             </div>
 
             <div class="book-actions">
-              <%= form_with url: create_from_google_books_books_path, method: :post, local: true, scope: :book, class: "add-book-form" do |f| %>
-                <%= f.hidden_field :title, value: book[:title] %>
-                <%= f.hidden_field :author, value: book[:author] %>
-                <%= f.hidden_field :publisher, value: book[:publisher] %>
-                <%= f.hidden_field :published_date, value: book[:published_date] %>
-                <%= f.hidden_field :description, value: book[:description] %>
-                <%= f.hidden_field :isbn, value: book[:isbn] %>
-                <%= f.hidden_field :image_url, value: book[:image_url] %>
-                <%= f.submit "この本を追加", class: "btn btn-primary" %>
+              <% if user_signed_in? %>
+                <%= form_with url: create_from_google_books_books_path, method: :post, local: true, scope: :book, class: "add-book-form" do |f| %>
+                  <%= f.hidden_field :title, value: book[:title] %>
+                  <%= f.hidden_field :author, value: book[:author] %>
+                  <%= f.hidden_field :publisher, value: book[:publisher] %>
+                  <%= f.hidden_field :published_date, value: book[:published_date] %>
+                  <%= f.hidden_field :description, value: book[:description] %>
+                  <%= f.hidden_field :isbn, value: book[:isbn] %>
+                  <%= f.hidden_field :image_url, value: book[:image_url] %>
+                  <%= f.submit "この本を追加", class: "btn btn-primary" %>
+                <% end %>
+              <% else %>
+                <%= link_to "ログインして追加", new_user_session_path, class: "btn btn-primary" %>
               <% end %>
             </div>
           </div>

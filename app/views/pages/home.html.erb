@@ -9,7 +9,8 @@
         <h1 class="display-4 fw-bold mb-3">あなたが出会うべき本には、<br>もう出会っている</h1>
         <p class="lead mb-4">忘れていた"運命の一冊"を再発見しよう</p>
         <%= link_to "はじめる", user_signed_in? ? readings_path : new_user_registration_path, class: "btn btn-success btn-lg me-2" %>
-        <%= link_to "ログイン", user_signed_in? ? readings_path : new_user_session_url, class: "btn btn-primary btn-lg" %>
+        <%= link_to "ログイン", user_signed_in? ? readings_path : new_user_session_url, class: "btn btn-primary btn-lg me-2" %>
+        <%= link_to "本を検索してみる", search_books_path, class: "btn btn-outline-secondary btn-lg" %>
       </div>
     </div>
   </div>
@@ -162,6 +163,7 @@
   <div class="container">
     <h2 class="mb-4">忘れていた一冊と再会しよう</h2>
     <%= link_to "はじめる", user_signed_in? ? readings_path : new_user_registration_path, class: "btn btn-success btn-lg me-2" %>
-    <%= link_to "ログイン", user_signed_in? ? readings_path : new_user_session_url, class: "btn btn-primary btn-lg" %>
+    <%= link_to "ログイン", user_signed_in? ? readings_path : new_user_session_url, class: "btn btn-primary btn-lg me-2" %>
+    <%= link_to "本を検索してみる", search_books_path, class: "btn btn-outline-secondary btn-lg" %>
   </div>
 </section>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BooksController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: %i[new create create_from_google_books]
 
   # 手動で書籍を追加するフォーム
   def new
