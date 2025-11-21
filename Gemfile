@@ -90,4 +90,6 @@ group :test do
   gem 'database_cleaner-active_record'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
+  # Rspecテストコードカバレッジ分析
+  gem 'simplecov', require: false
 end

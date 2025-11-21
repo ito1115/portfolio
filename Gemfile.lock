@@ -117,6 +117,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.6.2)
+    docile (1.4.1)
     dotenv (3.1.8)
     dotenv-rails (3.1.8)
       dotenv (= 3.1.8)
@@ -340,6 +341,12 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 4.0)
       multi_json (~> 1.10)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.13.2)
+    simplecov_json_formatter (0.1.4)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -407,6 +414,7 @@ DEPENDENCIES
   ruby-openai
   selenium-webdriver
   shoulda-matchers
+  simplecov
   sprockets-rails
   stimulus-rails
   turbo-rails
