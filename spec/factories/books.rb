@@ -7,7 +7,7 @@ FactoryBot.define do
     publisher { 'Publisher Name' }
     published_date { '2024-01-01' }
     description { 'This is a book description.' }
-    isbn { '978-4-1234-5678-9' }
+    isbn { nil }
     image_url { 'https://example.com/book.jpg' }
   end
 end
