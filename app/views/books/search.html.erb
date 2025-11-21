@@ -52,11 +52,12 @@
   </div>
 
   <% if @query.present? %>
-    <div class="search-info">
-      <p><strong>"<%= @query %>"の検索結果: <%= @pagination_info[:total_items] %>件中 <%= ((@pagination_info[:current_page] - 1) * @pagination_info[:per_page] + 1) %>-<%= [@pagination_info[:current_page] * @pagination_info[:per_page], @pagination_info[:total_items]].min %>件を表示</strong></p>
-    </div>
-
     <% if @books.any? %>
+      <div class="search-info">
+        <% start_num = (@pagination_info[:current_page] - 1) * @pagination_info[:per_page] + 1 %>
+        <% end_num = start_num + @books.length - 1 %>
+        <p><strong>"<%= @query %>"の検索結果: <%= @pagination_info[:total_items] %>件中 <%= start_num %>-<%= end_num %>件を表示</strong></p>
+      </div>
       <div class="search-results">
         <% @books.each do |book| %>
           <div class="search-result-item">
@@ -101,15 +102,19 @@
             </div>
 
             <div class="book-actions">
-              <%= form_with url: create_from_google_books_books_path, method: :post, local: true, scope: :book, class: "add-book-form" do |f| %>
-                <%= f.hidden_field :title, value: book[:title] %>
-                <%= f.hidden_field :author, value: book[:author] %>
-                <%= f.hidden_field :publisher, value: book[:publisher] %>
-                <%= f.hidden_field :published_date, value: book[:published_date] %>
-                <%= f.hidden_field :description, value: book[:description] %>
-                <%= f.hidden_field :isbn, value: book[:isbn] %>
-                <%= f.hidden_field :image_url, value: book[:image_url] %>
-                <%= f.submit "この本を追加", class: "btn btn-primary" %>
+              <% if user_signed_in? %>
+                <%= form_with url: create_from_google_books_books_path, method: :post, local: true, scope: :book, class: "add-book-form" do |f| %>
+                  <%= f.hidden_field :title, value: book[:title] %>
+                  <%= f.hidden_field :author, value: book[:author] %>
+                  <%= f.hidden_field :publisher, value: book[:publisher] %>
+                  <%= f.hidden_field :published_date, value: book[:published_date] %>
+                  <%= f.hidden_field :description, value: book[:description] %>
+                  <%= f.hidden_field :isbn, value: book[:isbn] %>
+                  <%= f.hidden_field :image_url, value: book[:image_url] %>
+                  <%= f.submit "この本を追加", class: "btn btn-primary" %>
+                <% end %>
+              <% else %>
+                <%= link_to "ログインして追加", new_user_session_path, class: "btn btn-primary" %>
               <% end %>
             </div>
           </div>

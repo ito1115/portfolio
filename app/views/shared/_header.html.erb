@@ -1,6 +1,6 @@
 <% if user_signed_in? %>
   <div class="header">
-    <h1>TSUNDOKU</h1>
+    <h1><%= link_to "TSUNDOKU", root_path, class: "logo-link" %></h1>
     <div class="header-right">
       <div class="user-info">
         <p>Welcome, <%= current_user.email %>!</p>
@@ -52,6 +52,17 @@
   </script>
 
   <style>
+  /* ロゴリンクのスタイル */
+  .logo-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .logo-link:hover {
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
   /* プロフィールドロップダウンのスタイル */
   .profile-dropdown {
     position: relative;
