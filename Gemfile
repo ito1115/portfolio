@@ -53,8 +53,9 @@ gem 'devise'
 gem 'dotenv-rails'
 gem 'ruby-openai'
 
-# 静的OGP
+# OGP
 gem 'meta-tags'
+gem 'mini_magick'
 
 # Googleログイン
 gem 'googleauth'
