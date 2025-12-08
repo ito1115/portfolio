@@ -103,7 +103,7 @@
   <% end %>
 </div>
 
-<script>
+<script nonce="<%= content_security_policy_nonce %>">
 // My Books検索機能
 document.addEventListener('turbo:load', function() {
   const searchInput = document.getElementById('myBooksSearchInput');

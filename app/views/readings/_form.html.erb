@@ -343,7 +343,7 @@
 }
 </style>
 
-<script>
+<script nonce="<%= content_security_policy_nonce %>">
 document.addEventListener('turbo:load', function() {
   const aiSuggestBtn = document.getElementById('aiSuggestBtn');
   const aiLoading = document.getElementById('aiLoading');
