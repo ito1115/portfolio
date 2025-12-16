@@ -37,13 +37,11 @@ class ReasonPredictor
       )
 
       # OpenAI APIを呼び出し
-      predicted_reason = OpenaiService.generate_text_with_retry(
+      OpenaiService.generate_text_with_retry(
         prompt: prompt,
         max_tokens: 150,
         temperature: 0.7
       )
-
-      predicted_reason
     end
 
     private
