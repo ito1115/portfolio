@@ -43,7 +43,7 @@ class ReasonPredictor
         temperature: 0.7
       )
 
-      predicted_reason || fallback_reason(stage)
+      predicted_reason
     end
 
     private
@@ -100,18 +100,6 @@ class ReasonPredictor
           .order(created_at: :desc)
           .limit(5)
           .pluck(:reason)
-    end
-
-    # フォールバック理由（API失敗時）
-    def fallback_reason(stage)
-      case stage
-      when :stage1
-        GENERAL_PATTERNS.sample
-      when :stage2
-        '新しい知識を身につけたかった'
-      when :stage3
-        '過去の傾向から判断した理由'
-      end
     end
   end
 end

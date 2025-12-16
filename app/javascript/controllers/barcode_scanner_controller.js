@@ -4,6 +4,7 @@ import "quagga"
 // QuaggaJSはグローバル変数として読み込まれます
 const Quagga = window.Quagga
 
+// @hotwired/stimulusのControllerクラスを継承
 export default class extends Controller {
   static targets = ["modal", "scanner", "status", "input"]
 
@@ -41,6 +42,7 @@ export default class extends Controller {
   initQuagga() {
     return new Promise((resolve, reject) => {
       Quagga.init({
+        // カメラ入力の設定
         inputStream: {
           name: "Live",
           type: "LiveStream",
@@ -48,23 +50,27 @@ export default class extends Controller {
           constraints: {
             width: { min: 640 },
             height: { min: 480 },
-            facingMode: "environment", // リアカメラを優先
-            aspectRatio: { min: 1, max: 2 }
+            facingMode: "environment", // リアカメラ（背面カメラ）を優先
+            aspectRatio: { min: 1, max: 2 } // 縦横比：1:1〜2:1
           }
         },
+        // バーコード読み取りの設定
         decoder: {
           readers: [
             "ean_reader", // EAN-13 (ISBN-13)
-            "ean_8_reader" // EAN-8
           ],
-          multiple: false
+          multiple: false // 1つのバーコードを検出したら処理を止める
         },
+        // 検出位置：画像内のバーコードの位置を自動検出
         locate: true,
+        // 検出精度
         locator: {
           patchSize: "medium",
           halfSample: true
         },
+        // 並列処理
         numOfWorkers: navigator.hardwareConcurrency || 4,
+        // スキャン頻度：1秒に10回チェック
         frequency: 10
       }, (err) => {
         if (err) {
@@ -72,8 +78,9 @@ export default class extends Controller {
           return
         }
 
-        // バーコード検出イベントをリスン
+        // バーコード検出後のイベントリスナー設定
         Quagga.onDetected(this.onBarcodeDetected.bind(this))
+        // バーコードスキャン実行
         Quagga.start()
         resolve()
       })
@@ -107,15 +114,8 @@ export default class extends Controller {
 
   // ISBNの簡易バリデーション
   isValidISBN(code) {
-    // ISBN-13: 978または979で始まる13桁
-    if (/^(978|979)\d{10}$/.test(code)) {
-      return true
-    }
-    // ISBN-10: 10桁（数字9桁+数字またはX）
-    if (/^\d{9}[\dX]$/i.test(code)) {
-      return true
-    }
-    return false
+    // 978または979で始まる13桁
+    return /^(978|979)\d{10}$/.test(code)
   }
 
   // ビープ音を鳴らす
