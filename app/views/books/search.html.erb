@@ -769,7 +769,7 @@
 }
 </style>
 
-<script>
+<script nonce="<%= content_security_policy_nonce %>">
 document.addEventListener('turbo:load', () => {
   // オートコンプリートの候補が選択されたとき
   document.addEventListener('autocomplete.change', (event) => {
