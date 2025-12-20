@@ -50,8 +50,8 @@ class BooksController < ApplicationController
     end
   end
 
-  # オートコンプリート用のAPI
-  def autocomplete
+  # 検索候補を取得するAPI
+  def suggestions
     # Stimulus Autocompleteは'q'パラメータを使う
     query = params[:q] || params[:query]
 
@@ -69,6 +69,6 @@ class BooksController < ApplicationController
     end
 
     # HTML形式でレスポンスを返す
-    render partial: 'books/autocomplete_results', locals: { suggestions: @suggestions }
+    render partial: 'books/suggestion_results', locals: { suggestions: @suggestions }
   end
 end

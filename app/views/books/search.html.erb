@@ -12,7 +12,7 @@
       <%= form.label :query, "タイトル・著者名・ISBN", class: "search-label" %>
       <div class="search-input-wrapper"
            data-controller="autocomplete"
-           data-autocomplete-url-value="<%= autocomplete_books_path %>">
+           data-autocomplete-url-value="<%= suggestions_books_path %>">
         <%= form.text_field :query,
                             value: @query,
                             placeholder: "例：吾輩は猫である",
