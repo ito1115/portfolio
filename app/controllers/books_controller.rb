@@ -1,38 +1,31 @@
 # frozen_string_literal: true
 
 class BooksController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create create_from_google_books]
+  before_action :authenticate_user!, only: %i[new create]
 
   # 手動で書籍を追加するフォーム
   def new
     @book = Book.new
   end
 
-  # 手動で書籍を作成
+  # 手動またはGoogle Books APIから書籍を作成
   def create
     book_params = params.expect(
       book: %i[title author publisher published_date
-               description isbn image_url]
+               description isbn image_url source]
     )
+    source = book_params[:source] || 'manual'
 
-    # 既存の書籍をISBNまたはタイトル+著者で検索
-    @book = if book_params[:isbn].present?
-              Book.find_by(isbn: book_params[:isbn])
-            else
-              Book.find_by(title: book_params[:title], author: book_params[:author])
-            end
+    # 既存の書籍を検索、なければ新規インスタンスを作成
+    @book = Book.find_or_initialize_from_params(book_params)
 
-    # 存在しなければ新規作成
-    if @book.nil?
-      @book = Book.new(book_params)
-      if @book.save
-        redirect_to new_reading_path(book_id: @book.id), notice: t('flash.books.create.success')
-      else
-        render :new, status: :unprocessable_entity
-      end
+    if @book.persisted? || @book.save
+      # 既存データ使用の場合も新規作成の場合と同じ成功メッセージ
+      redirect_to new_reading_path(book_id: @book.id), notice: t('flash.books.create.success')
+    elsif source == 'google_books'
+      redirect_to search_books_path, alert: t('flash.books.create.failure')
     else
-      # 既に存在する場合もそのまま読書記録作成へ
-      redirect_to new_reading_path(book_id: @book.id), notice: t('flash.books.create_from_google_books.already_exists')
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -77,30 +70,5 @@ class BooksController < ApplicationController
 
     # HTML形式でレスポンスを返す
     render partial: 'books/autocomplete_results', locals: { suggestions: @suggestions }
-  end
-
-  # Google Books APIの結果から書籍をDBに保存
-  def create_from_google_books
-    book_params = params.expect(
-      book: %i[title author publisher published_date
-               description isbn image_url]
-    )
-
-    # 既存の書籍をISBNまたはタイトル+著者で検索
-    @book = if book_params[:isbn].present?
-              Book.find_by(isbn: book_params[:isbn])
-            else
-              Book.find_by(title: book_params[:title], author: book_params[:author])
-            end
-
-    # 存在しなければ新規作成
-    @book ||= Book.create(book_params)
-
-    if @book.persisted?
-      # 書籍保存後、読書記録作成画面へリダイレクト
-      redirect_to new_reading_path(book_id: @book.id), notice: t('flash.books.create_from_google_books.success')
-    else
-      redirect_to search_books_path, alert: t('flash.books.create_from_google_books.failure')
-    end
   end
 end

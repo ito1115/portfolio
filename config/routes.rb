@@ -24,7 +24,6 @@ Rails.application.routes.draw do
     collection do
       get :search
       get :autocomplete
-      post :create_from_google_books
     end
   end
 

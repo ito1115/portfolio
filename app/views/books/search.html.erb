@@ -103,7 +103,8 @@
 
             <div class="book-actions">
               <% if user_signed_in? %>
-                <%= form_with url: create_from_google_books_books_path, method: :post, local: true, scope: :book, class: "add-book-form" do |f| %>
+                <%= form_with url: books_path, method: :post, local: true, scope: :book, class: "add-book-form" do |f| %>
+                  <%= f.hidden_field :source, value: 'google_books' %>
                   <%= f.hidden_field :title, value: book[:title] %>
                   <%= f.hidden_field :author, value: book[:author] %>
                   <%= f.hidden_field :publisher, value: book[:publisher] %>
