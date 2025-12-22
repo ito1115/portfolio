@@ -23,14 +23,14 @@ class BooksController < ApplicationController
       # 既存データ使用の場合も新規作成の場合と同じ成功メッセージ
       redirect_to new_reading_path(book_id: @book.id), notice: t('flash.books.create.success')
     elsif source == 'google_books'
-      redirect_to search_books_path, alert: t('flash.books.create.failure')
+      redirect_to books_path, alert: t('flash.books.create.failure')
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   # Google Books APIで書籍を検索
-  def search
+  def index
     @query = params[:query]
     @page = params[:page]&.to_i || 1
     @per_page = 20

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header">
     <h1>手動で本を追加</h1>
-    <%= link_to "検索に戻る", search_books_path, class: "btn btn-secondary" %>
+    <%= link_to "検索に戻る", books_path, class: "btn btn-secondary" %>
   </div>
 
   <%= form_with model: @book, local: true, class: "book-form" do |form| %>
@@ -57,7 +57,7 @@
 
     <div class="form-actions">
       <%= form.submit "本を追加", class: "btn btn-primary" %>
-      <%= link_to "キャンセル", search_books_path, class: "btn btn-secondary" %>
+      <%= link_to "キャンセル", books_path, class: "btn btn-secondary" %>
     </div>
   <% end %>
 </div>

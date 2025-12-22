@@ -8,7 +8,7 @@
   </div>
 
   <div class="search-form">
-    <%= form_with url: search_books_path, method: :get, local: true, class: "search-form-inner" do |form| %>
+    <%= form_with url: books_path, method: :get, local: true, class: "search-form-inner" do |form| %>
       <%= form.label :query, "タイトル・著者名・ISBN", class: "search-label" %>
       <div class="search-input-wrapper"
            data-controller="autocomplete"
@@ -130,7 +130,7 @@
               <!-- 前のページ -->
               <% if @pagination_info[:current_page] > 1 %>
                 <li class="page-item">
-                  <%= link_to "« 前", search_books_path(query: @query, page: @pagination_info[:current_page] - 1),
+                  <%= link_to "« 前", books_path(query: @query, page: @pagination_info[:current_page] - 1),
                              class: "page-link" %>
                 </li>
               <% else %>
@@ -148,7 +148,7 @@
 
               <% if start_page > 1 %>
                 <li class="page-item">
-                  <%= link_to "1", search_books_path(query: @query, page: 1), class: "page-link" %>
+                  <%= link_to "1", books_path(query: @query, page: 1), class: "page-link" %>
                 </li>
                 <% if start_page > 2 %>
                   <li class="page-item disabled">
@@ -164,7 +164,7 @@
                   </li>
                 <% else %>
                   <li class="page-item">
-                    <%= link_to page_num, search_books_path(query: @query, page: page_num), class: "page-link" %>
+                    <%= link_to page_num, books_path(query: @query, page: page_num), class: "page-link" %>
                   </li>
                 <% end %>
               <% end %>
@@ -176,7 +176,7 @@
                   </li>
                 <% end %>
                 <li class="page-item">
-                  <%= link_to @pagination_info[:total_pages], search_books_path(query: @query, page: @pagination_info[:total_pages]),
+                  <%= link_to @pagination_info[:total_pages], books_path(query: @query, page: @pagination_info[:total_pages]),
                              class: "page-link" %>
                 </li>
               <% end %>
@@ -184,7 +184,7 @@
               <!-- 次のページ -->
               <% if @pagination_info[:current_page] < @pagination_info[:total_pages] %>
                 <li class="page-item">
-                  <%= link_to "次 »", search_books_path(query: @query, page: @pagination_info[:current_page] + 1),
+                  <%= link_to "次 »", books_path(query: @query, page: @pagination_info[:current_page] + 1),
                              class: "page-link" %>
                 </li>
               <% else %>
