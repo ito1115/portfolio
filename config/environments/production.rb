@@ -90,7 +90,7 @@ Rails.application.configure do
     domain: ENV.fetch('PRODUCTION_HOST', nil),
     user_name: ENV.fetch('GMAIL_USERNAME', nil),
     password: ENV.fetch('GMAIL_PASSWORD', nil),
-    authentication: 'plain',
+    authentication: :login,
     enable_starttls_auto: true
   }
 
