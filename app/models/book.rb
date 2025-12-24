@@ -15,6 +15,17 @@ class Book < ApplicationRecord
     url&.sub(/^http:/, 'https:')
   end
 
+  # 既存の書籍を検索、なければ新規インスタンスを作成
+  def self.find_or_initialize_from_params(book_params)
+    book = if book_params[:isbn].present?
+             find_by(isbn: book_params[:isbn])
+           else
+             find_by(title: book_params[:title], author: book_params[:author])
+           end
+
+    book || new(book_params.except(:source))
+  end
+
   private
 
   def normalize_isbn

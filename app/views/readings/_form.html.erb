@@ -32,7 +32,7 @@
       </div>
       <%= form.hidden_field :book_id %>
       <div class="google-books-actions">
-        <%= link_to "別の本を検索", search_books_path, class: "btn btn-sm btn-outline-secondary" %>
+        <%= link_to "別の本を検索", books_path, class: "btn btn-sm btn-outline-secondary" %>
       </div>
     <% else %>
       <%= form.collection_select :book_id, Book.all, :id, :title,
@@ -40,7 +40,7 @@
                                  { class: "form-control" } %>
       <small class="form-text">またはGoogle Booksで検索してください</small>
       <div class="google-books-actions">
-        <%= link_to "Google Booksで検索", search_books_path, class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "Google Booksで検索", books_path, class: "btn btn-sm btn-outline-primary" %>
       </div>
     <% end %>
   </div>

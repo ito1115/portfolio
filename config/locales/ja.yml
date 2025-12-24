@@ -38,9 +38,6 @@ ja:
     books:
       create:
         success: "書籍を追加しました"
-      create_from_google_books:
-        success: "書籍を選択しました"
-        already_exists: "この書籍は既に登録されています"
         failure: "書籍の保存に失敗しました"
     readings:
       create:
