@@ -20,11 +20,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :books, only: %i[new create] do
+  resources :books, only: %i[index new create] do
     collection do
-      get :search
-      get :autocomplete
-      post :create_from_google_books
+      get :suggestions
     end
   end
 
