@@ -3,6 +3,27 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!, only: %i[new create]
 
+  # Google Books APIで書籍を検索
+  def index
+    @query = params[:query]
+    @page = params[:page]&.to_i || 1
+    @per_page = 20
+
+    if @query.present?
+      result = GoogleBooksService.search(@query, page: @page, per_page: @per_page)
+      @books = result[:results]
+      @pagination_info = {
+        total_items: result[:total_items],
+        current_page: result[:current_page],
+        per_page: result[:per_page],
+        total_pages: result[:total_pages]
+      }
+    else
+      @books = []
+      @pagination_info = { total_items: 0, current_page: @page, per_page: @per_page, total_pages: 0 }
+    end
+  end
+
   # 手動で書籍を追加するフォーム
   def new
     @book = Book.new
@@ -26,27 +47,6 @@ class BooksController < ApplicationController
       redirect_to books_path, alert: t('flash.books.create.failure')
     else
       render :new, status: :unprocessable_entity
-    end
-  end
-
-  # Google Books APIで書籍を検索
-  def index
-    @query = params[:query]
-    @page = params[:page]&.to_i || 1
-    @per_page = 20
-
-    if @query.present?
-      result = GoogleBooksService.search(@query, page: @page, per_page: @per_page)
-      @books = result[:results]
-      @pagination_info = {
-        total_items: result[:total_items],
-        current_page: result[:current_page],
-        per_page: result[:per_page],
-        total_pages: result[:total_pages]
-      }
-    else
-      @books = []
-      @pagination_info = { total_items: 0, current_page: @page, per_page: @per_page, total_pages: 0 }
     end
   end
 
